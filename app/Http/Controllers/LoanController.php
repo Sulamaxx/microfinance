@@ -621,7 +621,7 @@ class LoanController extends Controller
             'apply_amount'           => 'required|numeric',
             'interest_rate'          => 'required',
             'interest_type'          => 'required',
-            'term'                   => 'required|integer|max:100',
+            'term'                   => 'required|integer|max:1000',
             'term_period'            => $request->interest_type == 'one_time' ? '' : 'required',
             'first_payment_date'     => 'required',
             'customer_name'     => 'required',
