@@ -9,15 +9,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class PaymentGatewayController extends Controller {
+class PaymentGatewayController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -25,7 +27,8 @@ class PaymentGatewayController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $paymentgateways = PaymentGateway::all();
         return view('backend.payment_gateway.list', compact('paymentgateways'));
     }
@@ -35,7 +38,8 @@ class PaymentGatewayController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return view('backend.payment_gateway.create');
         } else {
@@ -49,7 +53,8 @@ class PaymentGatewayController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'   => 'required',
             'slug'   => 'required',
@@ -98,7 +103,6 @@ class PaymentGatewayController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $paymentgateway, 'table' => '#payment_gateways_table']);
         }
-
     }
 
     /**
@@ -107,7 +111,8 @@ class PaymentGatewayController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $paymentgateway = PaymentGateway::find($id);
         return view('backend.payment_gateway.edit', compact('paymentgateway', 'id'));
     }
@@ -119,7 +124,8 @@ class PaymentGatewayController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
             'image'         => 'nullable|image',
@@ -197,7 +203,5 @@ class PaymentGatewayController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $paymentgateway, 'table' => '#payment_gateways_table']);
         }
-
     }
-
 }

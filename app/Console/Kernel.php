@@ -5,7 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-class Kernel extends ConsoleKernel {
+class Kernel extends ConsoleKernel
+{
 
     /**
      * The Artisan commands provided by your application.
@@ -22,7 +23,8 @@ class Kernel extends ConsoleKernel {
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule) {
+    protected function schedule(Schedule $schedule)
+    {
         //Deduct Yearly Account Maintenance Fee
         $schedule->call(new \App\Cronjobs\YearlyMaintenanceFeePosting)->hourly();
     }
@@ -34,8 +36,8 @@ class Kernel extends ConsoleKernel {
      */
     protected function scheduleTimezone()
     {
-        $timeZone = get_option('timezone', 'Asia/Dhaka');
-        config(['app.timezone' =>  $timeZone ]);
+        $timeZone = get_option('timezone', 'Asia/Colombo');
+        config(['app.timezone' =>  $timeZone]);
         return $timeZone;
     }
 
@@ -44,7 +46,8 @@ class Kernel extends ConsoleKernel {
      *
      * @return void
      */
-    protected function commands() {
+    protected function commands()
+    {
         $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');

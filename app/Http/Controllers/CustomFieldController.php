@@ -6,15 +6,17 @@ use App\Models\CustomField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CustomFieldController extends Controller {
+class CustomFieldController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -22,7 +24,8 @@ class CustomFieldController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $table) {
+    public function index(Request $request, $table)
+    {
         $customFields = CustomField::where('table', $table)
             ->orderBy("id", "asc")
             ->get();
@@ -34,7 +37,8 @@ class CustomFieldController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return back();
         } else {
@@ -48,7 +52,8 @@ class CustomFieldController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'field_name'    => 'required',
             'field_type'    => 'required',
@@ -96,7 +101,8 @@ class CustomFieldController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $customField = CustomField::find($id);
         if (!$request->ajax()) {
             return back();
@@ -112,7 +118,8 @@ class CustomFieldController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'field_name'    => 'required',
             'field_type'    => 'required',
@@ -160,7 +167,8 @@ class CustomFieldController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $customField = CustomField::find($id);
         $customField->delete();
         return back()->with('success', _lang('Deleted Successfully'));

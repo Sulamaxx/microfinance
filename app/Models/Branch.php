@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Branch extends Model {
+class Branch extends Model
+{
     /**
      * The table associated with the model.
      *
@@ -17,10 +18,13 @@ class Branch extends Model {
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'no', 'code', 'weekdays'];
 
-    public function __construct() {
+    protected $casts = [
+        'weekdays' => 'array',
+    ];
+    public function __construct()
+    {
         $this->attributes['name'] = get_option('default_branch_name', 'Main Branch');
     }
-
 }

@@ -10,7 +10,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller {
+class LoginController extends Controller
+{
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -36,11 +37,13 @@ class LoginController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('guest')->except('logout');
     }
 
-    protected function credentials(Request $request) {
+    protected function credentials(Request $request)
+    {
         return [
             'email'    => $request->{$this->username()},
             'password' => $request->password,
@@ -56,7 +59,8 @@ class LoginController extends Controller {
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function validateLogin(Request $request) {
+    protected function validateLogin(Request $request)
+    {
 
         config(['recaptchav3.sitekey' => get_option('recaptcha_site_key')]);
         config(['recaptchav3.secret' => get_option('recaptcha_secret_key')]);
@@ -70,7 +74,8 @@ class LoginController extends Controller {
         ]);
     }
 
-    protected function authenticated(Request $request, $user) {
+    protected function authenticated(Request $request, $user)
+    {
         if ($user->status != 1) {
             $errors = [$this->username() => _lang('Your account is not active !')];
             Auth::logout();
@@ -80,7 +85,7 @@ class LoginController extends Controller {
 
         if (get_option('email_2fa_status', 0) == 1) {
             Overrider::load("Settings");
-            date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+            date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
             $user->resetTwoFactorCode();
             $user->generateTwoFactorCode();
             try {
@@ -89,7 +94,6 @@ class LoginController extends Controller {
                 return back()->with('error', 'SMTP Configuration is incorrect !');
             }
         }
-
     }
 
     /**
@@ -98,7 +102,8 @@ class LoginController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function sendFailedLoginResponse(Request $request) {
+    protected function sendFailedLoginResponse(Request $request)
+    {
         $errors = [$this->username() => trans('auth.failed')];
         $user   = \App\Models\User::where($this->username(), $request->{$this->username()})->first();
 

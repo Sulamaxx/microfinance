@@ -6,15 +6,17 @@ use App\Models\LoanProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class LoanProductController extends Controller {
+class LoanProductController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -22,7 +24,8 @@ class LoanProductController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $loanproducts = LoanProduct::all()->sortByDesc("id");
         return view('backend.loan_product.list', compact('loanproducts'));
     }
@@ -32,7 +35,8 @@ class LoanProductController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return view('backend.loan_product.create');
         } else {
@@ -46,7 +50,8 @@ class LoanProductController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'                      => 'required',
             'loan_id_prefix'            => 'nullable|max:10',
@@ -111,7 +116,8 @@ class LoanProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $loanproduct = LoanProduct::find($id);
         if (!$request->ajax()) {
             return view('backend.loan_product.view', compact('loanproduct', 'id'));
@@ -126,14 +132,14 @@ class LoanProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $loanproduct = LoanProduct::find($id);
         if (!$request->ajax()) {
             return view('backend.loan_product.edit', compact('loanproduct', 'id'));
         } else {
             return view('backend.loan_product.modal.edit', compact('loanproduct', 'id'));
         }
-
     }
 
     /**
@@ -143,7 +149,8 @@ class LoanProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'                      => 'required',
             'loan_id_prefix'            => 'nullable|max:10',
@@ -200,7 +207,6 @@ class LoanProductController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated successfully'), 'data' => $loanproduct, 'table' => '#loan_products_table']);
         }
-
     }
 
     /**
@@ -209,7 +215,8 @@ class LoanProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $loanproduct = LoanProduct::find($id);
         $loanproduct->delete();
         return redirect()->route('loan_products.index')->with('success', _lang('Deleted successfully'));

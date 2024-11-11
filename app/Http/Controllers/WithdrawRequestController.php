@@ -10,15 +10,17 @@ use DataTables;
 use DB;
 use Illuminate\Http\Request;
 
-class WithdrawRequestController extends Controller {
+class WithdrawRequestController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -26,11 +28,13 @@ class WithdrawRequestController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('backend.withdraw_request.list');
     }
 
-    public function get_table_data(Request $request) {
+    public function get_table_data(Request $request)
+    {
 
         $withdraw_requests = WithdrawRequest::select('withdraw_requests.*')
             ->with(['member', 'method', 'account.savings_type', 'account.savings_type.currency'])
@@ -67,7 +71,6 @@ class WithdrawRequestController extends Controller {
                 $actions .= '</form>';
 
                 return $actions;
-
             })
             ->setRowId(function ($withdraw_request) {
                 return "row_" . $withdraw_request->id;
@@ -82,7 +85,8 @@ class WithdrawRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $withdrawRequest = WithdrawRequest::find($id);
         return view('backend.withdraw_request.view', compact('withdrawRequest', 'id'));
     }
@@ -93,7 +97,8 @@ class WithdrawRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function approve($id) {
+    public function approve($id)
+    {
         DB::beginTransaction();
 
         $withdrawRequest         = WithdrawRequest::find($id);
@@ -110,7 +115,8 @@ class WithdrawRequestController extends Controller {
 
         try {
             $transaction->member->notify(new ApprovedWithdrawRequest($withdrawRequest));
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         DB::commit();
         return redirect()->route('withdraw_requests.index')->with('success', _lang('Request Approved'));
@@ -122,7 +128,8 @@ class WithdrawRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function reject($id) {
+    public function reject($id)
+    {
         DB::beginTransaction();
         $withdrawRequest = WithdrawRequest::find($id);
 
@@ -139,7 +146,8 @@ class WithdrawRequestController extends Controller {
 
         try {
             $transaction->member->notify(new RejectWithdrawRequest($withdrawRequest));
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         DB::commit();
         return redirect()->route('withdraw_requests.index')->with('success', _lang('Request Rejected'));
@@ -151,13 +159,14 @@ class WithdrawRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $withdrawRequest = WithdrawRequest::find($id);
         if ($withdrawRequest->transaction_id != null) {
             $transaction = Transaction::find($withdrawRequest->transaction_id);
-            if($transaction){
+            if ($transaction) {
                 $transaction->delete();
-            } 
+            }
         }
         $withdrawRequest->delete();
         return redirect()->route('withdraw_requests.index')->with('success', _lang('Deleted Successfully'));

@@ -7,15 +7,17 @@ use App\Models\NavigationItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class NavigationController extends Controller {
+class NavigationController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -23,7 +25,8 @@ class NavigationController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $navigations = Navigation::all()->sortByDesc("id");
         return view('backend.site_navigation.list', compact('navigations'));
     }
@@ -33,7 +36,8 @@ class NavigationController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return view('backend.site_navigation.create');
         } else {
@@ -47,7 +51,8 @@ class NavigationController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'   => 'required',
             'status' => 'required',
@@ -75,7 +80,6 @@ class NavigationController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Sucessfully'), 'data' => $navigation, 'table' => '#navigations_table']);
         }
-
     }
 
     /**
@@ -84,7 +88,8 @@ class NavigationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $navigation      = Navigation::find($id);
         $navigationitems = $navigation->navigationItems;
         return view('backend.site_navigation.view', compact('navigation', 'navigationitems', 'id'));
@@ -96,14 +101,14 @@ class NavigationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $navigation = Navigation::find($id);
         if (!$request->ajax()) {
             return view('backend.site_navigation.edit', compact('navigation', 'id'));
         } else {
             return view('backend.site_navigation.modal.edit', compact('navigation', 'id'));
         }
-
     }
 
     /**
@@ -113,7 +118,8 @@ class NavigationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'   => 'required',
             'status' => 'required',
@@ -141,7 +147,6 @@ class NavigationController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Sucessfully'), 'data' => $navigation, 'table' => '#navigations_table']);
         }
-
     }
 
     /**
@@ -150,7 +155,8 @@ class NavigationController extends Controller {
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store_sorting(Request $request) {
+    public function store_sorting(Request $request)
+    {
         $order = 1;
 
         $array = json_decode($request->sortable_menu);
@@ -168,7 +174,8 @@ class NavigationController extends Controller {
         return back()->with('success', _lang('Saved Sucessfully'));
     }
 
-    private function check_child($object, $order) {
+    private function check_child($object, $order)
+    {
         if (isset($object->children)) {
             foreach ($object->children as $child_menu) {
                 $navigationitem            = NavigationItem::find($child_menu->id);
@@ -187,7 +194,8 @@ class NavigationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $navigation = Navigation::find($id);
         $navigation->delete();
         return redirect()->route('navigations.index')->with('success', _lang('Deleted Sucessfully'));

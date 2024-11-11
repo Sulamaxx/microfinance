@@ -67,7 +67,7 @@ Route::group(['middleware' => ['install']], function () {
         Route::group(['middleware' => ['Email2FA']], function () {
 
 
-            // Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+            Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
             // //Profile Controller
             // Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
@@ -96,8 +96,8 @@ Route::group(['middleware' => ['install']], function () {
             //         'destroy',
             //     ]);
 
-            //     //Branch Controller
-            //     Route::resource('branches', BranchController::class);
+            //Branch Controller
+            Route::resource('branches', BranchController::class);
 
             //     //Savings Products
             //     Route::resource('savings_products', SavingsProductController::class);
@@ -164,16 +164,16 @@ Route::group(['middleware' => ['install']], function () {
                 // Route::get('dashboard/due_loan_list', [DashboardController::class, 'due_loan_list'])->name('dashboard.due_loan_list');
                 // Route::get('dashboard/active_loan_balances',  [DashboardController::class, 'active_loan_balances'])->name('dashboard.active_loan_balances');
 
-                // //Member Controller
+                //Member Controller
                 // Route::match(['get', 'post'], 'members/import', [MemberController::class, 'import'])->name('members.import');
                 // Route::match(['get', 'post'], 'members/accept_request/{id}', [MemberController::class, 'accept_request'])->name('members.accept_request');
                 // Route::get('members/reject_request/{id}', [MemberController::class, 'reject_request'])->name('members.reject_request');
                 // Route::get('members/pending_requests', [MemberController::class, 'pending_requests'])->name('members.pending_requests');
-                // Route::get('members/get_member_transaction_data/{member_id}', [MemberController::class, 'get_member_transaction_data']);
-                // Route::get('members/get_table_data', [MemberController::class, 'get_table_data']);
-                // Route::post('members/send_email', [MemberController::class, 'send_email'])->name('members.send_email');
-                // Route::post('members/send_sms', [MemberController::class, 'send_sms'])->name('members.send_sms');
-                // Route::resource('members', MemberController::class)->middleware("demo:PUT|PATCH|DELETE");
+                Route::get('members/get_member_transaction_data/{member_id}', [MemberController::class, 'get_member_transaction_data']);
+                Route::get('members/get_table_data', [MemberController::class, 'get_table_data']);
+                Route::post('members/send_email', [MemberController::class, 'send_email'])->name('members.send_email');
+                Route::post('members/send_sms', [MemberController::class, 'send_sms'])->name('members.send_sms');
+                Route::resource('members', MemberController::class)->middleware("demo:PUT|PATCH|DELETE");
 
                 // //Custom Field Controller
                 // Route::resource('custom_fields', CustomFieldController::class)->except(['index', 'show'])->middleware("demo");
@@ -207,7 +207,7 @@ Route::group(['middleware' => ['install']], function () {
                 // Route::get('deposit_requests/reject/{id}', [DepositRequestController::class, 'reject'])->name('deposit_requests.reject');
                 // Route::delete('deposit_requests/{id}', [DepositRequestController::class, 'destroy'])->name('deposit_requests.destroy');
                 // Route::get('deposit_requests/{id}', [DepositRequestController::class, 'show'])->name('deposit_requests.show');
-                // Route::get('deposit_requests', [DepositRequestController::class, 'index'])->name('deposit_requests.index');
+                Route::get('deposit_requests', [DepositRequestController::class, 'index'])->name('deposit_requests.index');
 
                 // //Withdraw Requests
                 // Route::post('withdraw_requests/get_table_data', [WithdrawRequestController::class, 'get_table_data']);
@@ -215,7 +215,7 @@ Route::group(['middleware' => ['install']], function () {
                 // Route::get('withdraw_requests/reject/{id}', [WithdrawRequestController::class, 'reject'])->name('withdraw_requests.reject');
                 // Route::delete('withdraw_requests/{id}', [WithdrawRequestController::class, 'destroy'])->name('withdraw_requests.destroy');
                 // Route::get('withdraw_requests/{id}', [WithdrawRequestController::class, 'show'])->name('withdraw_requests.show');
-                // Route::get('withdraw_requests', [WithdrawRequestController::class, 'index'])->name('withdraw_requests.index');
+                Route::get('withdraw_requests', [WithdrawRequestController::class, 'index'])->name('withdraw_requests.index');
 
                 // //Expense
                 // Route::get('expenses/get_table_data', [ExpenseController::class, 'get_table_data']);
@@ -231,7 +231,7 @@ Route::group(['middleware' => ['install']], function () {
                 // Route::get('loans/approve/{id}', [LoanController::class, 'approve'])->name('loans.approve');
                 // Route::get('loans/reject/{id}', [LoanController::class, 'reject'])->name('loans.reject');
                 // Route::get('loans/filter/{status?}', [LoanController::class, 'index'])->name('loans.filter')->where('status', '[A-Za-z]+');
-                // Route::resource('loans', LoanController::class);
+                Route::resource('loans', LoanController::class);
 
                 // //Loan Collateral Controller
                 // Route::get('loan_collaterals/loan/{loan_id}', [LoanCollateralController::class, 'index'])->name('loan_collaterals.index');
@@ -302,14 +302,14 @@ Route::group(['middleware' => ['install']], function () {
             //     }
             // })->name('switch_language');
 
-            // Route::get('switch_branch/', function () {
-            //     if (isset($_GET['branch']) && isset($_GET['branch_id'])) {
-            //         session(['branch' => $_GET['branch'], 'branch_id' => $_GET['branch_id']]);
-            //     } else {
-            //         request()->session()->forget(['branch', 'branch_id']);
-            //     }
-            //     return back();
-            // })->name('switch_branch');
+            Route::get('switch_branch/', function () {
+                if (isset($_GET['branch']) && isset($_GET['branch_id'])) {
+                    session(['branch' => $_GET['branch'], 'branch_id' => $_GET['branch_id']]);
+                } else {
+                    request()->session()->forget(['branch', 'branch_id']);
+                }
+                return back();
+            })->name('switch_branch');
         });
     });
 });

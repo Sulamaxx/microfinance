@@ -9,15 +9,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class InterestController extends Controller {
+class InterestController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -25,11 +27,13 @@ class InterestController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('backend.interest_calculation.list');
     }
 
-    public function calculator(Request $request) {
+    public function calculator(Request $request)
+    {
         if ($request->isMethod('get')) {
             return view('backend.interest_calculation.create');
         }
@@ -100,7 +104,8 @@ class InterestController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function interest_posting(Request $request) {
+    public function interest_posting(Request $request)
+    {
         @ini_set('max_execution_time', 0);
         @set_time_limit(0);
 
@@ -141,12 +146,12 @@ class InterestController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function get_last_posting(Request $request, $account_type_id = '') {
+    public function get_last_posting(Request $request, $account_type_id = '')
+    {
         $interestPosting = InterestPosting::where('account_type_id', $account_type_id)->first();
         if ($interestPosting) {
             return response()->json(['result' => true, 'data' => $interestPosting]);
         }
         return response()->json(['result' => false]);
     }
-
 }

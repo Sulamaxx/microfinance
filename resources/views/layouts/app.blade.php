@@ -217,7 +217,9 @@
 
                                 <!--Branch Switcher-->
                                 @if (auth()->user()->user_type == 'admin')
-                                    <div class="dropdown float-right">
+                                    {{-- Temporary comment --}}
+
+                                    {{-- <div class="dropdown float-right">
                                         <a class="dropdown-toggle btn btn-dark btn-xs" type="button"
                                             id="selectLanguage" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">
@@ -233,7 +235,7 @@
                                                     href="{{ route('switch_branch') }}?branch_id={{ $branch->id }}&branch={{ $branch->name }}">{{ $branch->name }}</a>
                                             @endforeach
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 @endif
                                 <!--@include('layouts.others.breadcrumbs')-->
                             </div>

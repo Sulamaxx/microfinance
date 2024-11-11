@@ -418,7 +418,7 @@ if (!function_exists('get_array_data')) {
 if (!function_exists('update_option')) {
     function update_option($name, $value)
     {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 
         $data               = array();
         $data['value']      = $value;
@@ -872,7 +872,7 @@ if (!function_exists('file_icon')) {
 if (!function_exists('update_currency_exchange_rate')) {
     function update_currency_exchange_rate()
     {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 
         $start = new \Carbon\Carbon(get_option('currency_update_time', date("Y-m-d H:i:s", strtotime('-24 hours', time()))));
         $end   = \Carbon\Carbon::now();

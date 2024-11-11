@@ -7,19 +7,21 @@ use App\Models\Transaction;
 use App\Notifications\DepositMoney;
 use Illuminate\Http\Request;
 
-class ProcessController extends Controller {
+class ProcessController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         ini_set('error_reporting', E_ALL);
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
 
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -27,7 +29,8 @@ class ProcessController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public static function process($deposit) {
+    public static function process($deposit)
+    {
         $data = array();
 
         $data['custom'] = $deposit->id;
@@ -43,12 +46,12 @@ class ProcessController extends Controller {
 
         $xpub    = $deposit->gateway->parameters->blockchain_xpub;
         $api_key = $deposit->gateway->parameters->blockchain_api_key;
-		$gap_limit = 2000;
+        $gap_limit = 2000;
 
         $data['callback_url'] = route('callback.' . $deposit->gateway->slug) . "?invoice_id=" . $deposit->id . "&secret=" . $secret;
         $root_url             = 'https://api.blockchain.info/v2/receive';
-		
-		$parameters = 'xpub=' .$xpub. '&callback=' .urlencode($data['callback_url']). '&key=' .$api_key. '&gap_limit=' .$gap_limit;
+
+        $parameters = 'xpub=' . $xpub . '&callback=' . urlencode($data['callback_url']) . '&key=' . $api_key . '&gap_limit=' . $gap_limit;
 
         $resp = file_get_contents($root_url . '?' . $parameters);
 
@@ -81,7 +84,8 @@ class ProcessController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function callback(Request $request) {
+    public function callback(Request $request)
+    {
         @ini_set('max_execution_time', 0);
         @set_time_limit(0);
 
@@ -99,7 +103,7 @@ class ProcessController extends Controller {
         $transaction = Transaction::find($invoice_id);
 
         if ($value_in_btc == floatval($transaction->transaction_details->btc_amount) && $address == $transaction->transaction_details->btc_address && $secret == $my_secret && $confirmations > 2) {
-			
+
             //Update Transaction
             $transaction->status = 2; // Completed
             $transaction->save();
@@ -107,8 +111,8 @@ class ProcessController extends Controller {
             //Trigger Deposit Money notifications
             try {
                 $transaction->member->notify(new DepositMoney($transaction));
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
     }
-
 }

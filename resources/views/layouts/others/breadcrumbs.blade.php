@@ -1,19 +1,19 @@
 <ul class="breadcrumbs float-left">
-    @php    
-    $routeArray = request()->route()->getAction();
-    $controllerAction = $routeArray['controller'];
-    list($controller, $action) = explode('@', $controllerAction);
-    $segments = ''; 
+    @php
+        $routeArray = request()->route()->getAction();
+        $controllerAction = $routeArray['controller'];
+        [$controller, $action] = explode('@', $controllerAction);
+        $segments = '';
     @endphp
 
-    @foreach(Request::segments() as $segment)
-        @if ($segment == "dashboard")
+    @foreach (Request::segments() as $segment)
+        @if ($segment == 'dashboard')
             @php continue; @endphp
         @endif
-        
+
         @php $segments .= '/'.$segment; @endphp
-        
-        @if(is_numeric($segment))
+
+        @if (is_numeric($segment))
             @if (method_exists($controller, 'show'))
                 @php $segment = 'View'; //continue; @endphp
             @else
@@ -21,17 +21,17 @@
             @endif
         @endif
 
-        @if(! ignoreRoutes($segments))
+        @if (!ignoreRoutes($segments))
             @php continue; @endphp
         @endif
-        
-        @if(! $loop->last)
+
+        @if (!$loop->last)
             <li>
-                <a href="{{ url($segments) }}">{{ ucwords(str_replace("_"," ",$segment)) }}</a>
+                <a href="{{ url($segments) }}">{{ ucwords(str_replace('_', ' ', $segment)) }}</a>
             </li>
         @else
             <li>
-                <span>{{ ucwords(str_replace("_"," ",$segment)) }}</span>
+                <span>{{ ucwords(str_replace('_', ' ', $segment)) }}</span>
             </li>
         @endif
     @endforeach

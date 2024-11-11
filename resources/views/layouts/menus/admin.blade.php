@@ -7,29 +7,34 @@
 
 {{-- temporary disable --}}
 
-{{-- <li>
-	<a href="{{ route('dashboard.index') }}"><i class="ti-dashboard"></i><span>{{ _lang('Dashboard') }}</span></a>
+<li>
+    <a href="{{ route('dashboard.index') }}"><i class="ti-dashboard"></i><span>{{ _lang('Dashboard') }}</span></a>
+</li>
+
+
+<li>
+    <a href="{{ route('branches.index') }}"><i class="fas fa-building"></i><span>{{ _lang('Centers') }}</span></a>
 </li>
 
 <li>
-	<a href="{{ route('branches.index') }}"><i class="fas fa-building"></i><span>{{ _lang('Branches') }}</span></a>
+    <a href="javascript: void(0);"><i class="fas fa-user-friends"></i><span>{{ _lang('Members') }}
+            {!! xss_clean($member_requests) !!}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+    <ul class="nav-second-level" aria-expanded="false">
+        <li class="nav-item"><a class="nav-link" href="{{ route('members.index') }}">{{ _lang('View Members') }}</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('members.create') }}">{{ _lang('Add Member') }}</a></li>
+        {{-- <li class="nav-item"><a class="nav-link" href="{{ route('members.import') }}">{{ _lang('Bulk Import') }}</a> --}}
 </li>
-
-<li>
-	<a href="javascript: void(0);"><i class="fas fa-user-friends"></i><span>{{ _lang('Members') }} {!! xss_clean($member_requests) !!}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-	<ul class="nav-second-level" aria-expanded="false">
-		<li class="nav-item"><a class="nav-link" href="{{ route('members.index') }}">{{ _lang('View Members') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('members.create') }}">{{ _lang('Add Member') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('members.import') }}">{{ _lang('Bulk Import') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('custom_fields.index', ['members']) }}">{{ _lang('Custom Fields') }}</a></li>
-		<li class="nav-item">
-			<a class="nav-link" href="{{ route('members.pending_requests') }}">
-			{{ _lang('Member Requests') }}
-			{!! xss_clean($member_requests) !!}
-			</a>
-		</li>
-	</ul>
+{{-- <li class="nav-item"><a class="nav-link"
+        href="{{ route('custom_fields.index', ['members']) }}">{{ _lang('Custom Fields') }}</a></li> --}}
+{{-- <li class="nav-item">
+    <a class="nav-link" href="{{ route('members.pending_requests') }}">
+        {{ _lang('Member Requests') }}
+        {!! xss_clean($member_requests) !!}
+    </a>
 </li> --}}
+</ul>
+</li>
 
 <li>
     <a href="javascript: void(0);"><i class="fas fa-hand-holding-usd"></i><span>{{ _lang('Loans') }}

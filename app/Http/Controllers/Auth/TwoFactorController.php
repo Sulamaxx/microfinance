@@ -59,7 +59,7 @@ class TwoFactorController extends Controller
             return redirect()->back()->withErrors(['otp' => _lang('Sorry, You have attempts maximum number of times to resend code!')]);
         }
 
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
         $user->generateTwoFactorCode();
         try {
             $user->notify(new TwoFactorCode());

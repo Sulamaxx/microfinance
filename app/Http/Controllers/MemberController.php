@@ -20,15 +20,17 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
-class MemberController extends Controller {
+class MemberController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -36,11 +38,13 @@ class MemberController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('backend.member.list');
     }
 
-    public function get_table_data() {
+    public function get_table_data()
+    {
         $members = Member::select('members.*')
             ->with('branch')
             ->orderBy("members.id", "desc");
@@ -57,16 +61,16 @@ class MemberController extends Controller {
             })
             ->addColumn('action', function ($member) {
                 return '<div class="dropdown text-center">'
-                . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
-                . '&nbsp;</button>'
-                . '<div class="dropdown-menu">'
-                . '<a class="dropdown-item" href="' . route('members.edit', $member->id) . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
-                . '<a class="dropdown-item" href="' . route('members.show', $member->id) . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
-                . '<a class="dropdown-item" href="' . route('member_documents.index', $member->id) . '"><i class="ti-files"></i>  ' . _lang('Documents') . '</a>'
-                . '<form action="' . route('members.destroy', $member->id) . '" method="post">'
-                . csrf_field()
-                . '<input name="_method" type="hidden" value="DELETE">'
-                . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
+                    . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
+                    . '&nbsp;</button>'
+                    . '<div class="dropdown-menu">'
+                    . '<a class="dropdown-item" href="' . route('members.edit', $member->id) . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
+                    . '<a class="dropdown-item" href="' . route('members.show', $member->id) . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
+                    . '<a class="dropdown-item" href="' . route('member_documents.index', $member->id) . '"><i class="ti-files"></i>  ' . _lang('Documents') . '</a>'
+                    . '<form action="' . route('members.destroy', $member->id) . '" method="post">'
+                    . csrf_field()
+                    . '<input name="_method" type="hidden" value="DELETE">'
+                    . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
                     . '</form>'
                     . '</div>'
                     . '</div>';
@@ -78,7 +82,8 @@ class MemberController extends Controller {
             ->make(true);
     }
 
-    public function pending_requests() {
+    public function pending_requests()
+    {
         $data            = array();
         $data['members'] = Member::where('status', 0)
             ->withoutGlobalScopes(['status'])
@@ -91,7 +96,8 @@ class MemberController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $customFields = CustomField::where('table', 'members')
             ->where('status', 1)
             ->orderBy("id", "asc")
@@ -107,7 +113,8 @@ class MemberController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validationRules = [
             'first_name'   => 'required',
             'last_name'    => 'required',
@@ -222,7 +229,8 @@ class MemberController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $member       = Member::withoutGlobalScopes(['status'])->find($id);
         $customFields = CustomField::where('table', 'members')
             ->where('status', 1)
@@ -235,7 +243,8 @@ class MemberController extends Controller {
         }
     }
 
-    public function get_member_transaction_data($member_id) {
+    public function get_member_transaction_data($member_id)
+    {
         $transactions = Transaction::select('transactions.*')
             ->with(['member', 'account', 'account.savings_type'])
             ->where('member_id', $member_id)
@@ -267,15 +276,15 @@ class MemberController extends Controller {
             }, true)
             ->addColumn('action', function ($transaction) {
                 return '<div class="dropdown text-center">'
-                . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
-                . '&nbsp;</button>'
-                . '<div class="dropdown-menu">'
-                . '<a class="dropdown-item" href="' . route('transactions.edit', $transaction['id']) . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
-                . '<a class="dropdown-item" href="' . route('transactions.show', $transaction['id']) . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
-                . '<form action="' . route('transactions.destroy', $transaction['id']) . '" method="post">'
-                . csrf_field()
-                . '<input name="_method" type="hidden" value="DELETE">'
-                . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
+                    . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
+                    . '&nbsp;</button>'
+                    . '<div class="dropdown-menu">'
+                    . '<a class="dropdown-item" href="' . route('transactions.edit', $transaction['id']) . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
+                    . '<a class="dropdown-item" href="' . route('transactions.show', $transaction['id']) . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
+                    . '<form action="' . route('transactions.destroy', $transaction['id']) . '" method="post">'
+                    . csrf_field()
+                    . '<input name="_method" type="hidden" value="DELETE">'
+                    . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
                     . '</form>'
                     . '</div>'
                     . '</div>';
@@ -293,7 +302,8 @@ class MemberController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $customFields = CustomField::where('table', 'members')
             ->where('status', 1)
             ->orderBy("id", "asc")
@@ -313,7 +323,8 @@ class MemberController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $member = Member::withoutGlobalScopes(['status'])->find($id);
 
         $validationRules = [
@@ -432,7 +443,8 @@ class MemberController extends Controller {
         }
     }
 
-    public function send_email(Request $request) {
+    public function send_email(Request $request)
+    {
         @ini_set('max_execution_time', 0);
         @set_time_limit(0);
 
@@ -478,7 +490,8 @@ class MemberController extends Controller {
         }
     }
 
-    public function send_sms(Request $request) {
+    public function send_sms(Request $request)
+    {
         @ini_set('max_execution_time', 0);
         @set_time_limit(0);
 
@@ -527,7 +540,8 @@ class MemberController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $member = Member::find($id);
         if ($member->user) {
             $member->user->delete();
@@ -536,7 +550,8 @@ class MemberController extends Controller {
         return redirect()->route('members.index')->with('success', _lang('Deleted Successfully'));
     }
 
-    public function accept_request(Request $request, $id) {
+    public function accept_request(Request $request, $id)
+    {
         if ($request->isMethod('get')) {
             $member = Member::withoutGlobalScopes(['status'])->find($id);
             return view('backend.member.modal.accept_request', compact('member'));
@@ -571,7 +586,8 @@ class MemberController extends Controller {
             if ($member->status == 1) {
                 try {
                     $member->notify(new MemberRequestAccepted($member));
-                } catch (\Exception $e) {}
+                } catch (\Exception $e) {
+                }
             }
 
             if (!$request->ajax()) {
@@ -579,18 +595,19 @@ class MemberController extends Controller {
             } else {
                 return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Member Request Accepted'), 'data' => $member, 'table' => '#members_table']);
             }
-
         }
     }
 
-    public function reject_request($id) {
+    public function reject_request($id)
+    {
         $member = Member::withoutGlobalScopes(['status'])->find($id);
         $member->user->delete();
         $member->delete();
         return redirect()->back()->with('error', _lang('Member Request Rejected'));
     }
 
-    public function import(Request $request) {
+    public function import(Request $request)
+    {
         if ($request->isMethod('get')) {
             return view('backend.member.import');
         } else if ($request->isMethod('post')) {

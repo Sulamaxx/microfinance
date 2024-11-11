@@ -10,15 +10,17 @@ use DataTables;
 use DB;
 use Illuminate\Http\Request;
 
-class DepositRequestController extends Controller {
+class DepositRequestController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -26,11 +28,13 @@ class DepositRequestController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('backend.deposit_request.list');
     }
 
-    public function get_table_data(Request $request) {
+    public function get_table_data(Request $request)
+    {
 
         $deposit_requests = DepositRequest::select('deposit_requests.*')
             ->with(['member', 'method', 'account.savings_type', 'account.savings_type.currency'])
@@ -81,7 +85,8 @@ class DepositRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $depositrequest = DepositRequest::find($id);
         return view('backend.deposit_request.view', compact('depositrequest', 'id'));
     }
@@ -92,7 +97,8 @@ class DepositRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function approve($id) {
+    public function approve($id)
+    {
         DB::beginTransaction();
 
         $depositRequest = DepositRequest::find($id);
@@ -120,7 +126,8 @@ class DepositRequestController extends Controller {
 
         try {
             $transaction->member->notify(new ApprovedDepositRequest($transaction));
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         DB::commit();
         return redirect()->route('deposit_requests.index')->with('success', _lang('Request Approved'));
@@ -132,7 +139,8 @@ class DepositRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function reject($id) {
+    public function reject($id)
+    {
         DB::beginTransaction();
         $depositRequest = DepositRequest::find($id);
 
@@ -149,7 +157,8 @@ class DepositRequestController extends Controller {
 
         try {
             $depositRequest->member->notify(new RejectDepositRequest($depositRequest));
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return redirect()->route('deposit_requests.index')->with('success', _lang('Request Rejected'));
     }
@@ -160,13 +169,14 @@ class DepositRequestController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $depositRequest = DepositRequest::find($id);
         if ($depositRequest->transaction_id != null) {
             $transaction = Transaction::find($depositRequest->transaction_id);
-            if($transaction){
+            if ($transaction) {
                 $transaction->delete();
-            } 
+            }
         }
         $depositRequest->delete();
         return redirect()->route('deposit_requests.index')->with('success', _lang('Deleted Successfully'));

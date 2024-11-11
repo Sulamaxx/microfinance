@@ -12,46 +12,54 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
 use Image;
 
-class ProfileController extends Controller {
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+class ProfileController extends Controller
+{
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
-    public function index() {
+    public function index()
+    {
         $alert_col = 'col-lg-8 offset-lg-2';
         $profile = User::find(Auth::User()->id);
         return view('backend.profile.profile_view', compact('profile', 'alert_col'));
     }
 
-    public function membership_details(Request $request){
+    public function membership_details(Request $request)
+    {
         $alert_col = 'col-lg-8 offset-lg-2';
         $auth = auth()->user();
         return view('backend.profile.membership_details', compact('auth', 'alert_col'));
     }
 
-    public function show_notification($id) {
-		$notification = auth()->user()->member->notifications()->find($id);
-		if ($notification && request()->ajax()) {
-			$notification->markAsRead();
-			return new Response('<p class="p-2">' . $notification->data['message'] . '</p>');
-		}
-		return back();
-	}
+    public function show_notification($id)
+    {
+        $notification = auth()->user()->member->notifications()->find($id);
+        if ($notification && request()->ajax()) {
+            $notification->markAsRead();
+            return new Response('<p class="p-2">' . $notification->data['message'] . '</p>');
+        }
+        return back();
+    }
 
-	public function notification_mark_as_read($id) {
-		$notification = auth()->user()->member->notifications()->find($id);
-		if ($notification) {
-			$notification->markAsRead();
-		}
-	}
+    public function notification_mark_as_read($id)
+    {
+        $notification = auth()->user()->member->notifications()->find($id);
+        if ($notification) {
+            $notification->markAsRead();
+        }
+    }
 
-    public function edit() {
+    public function edit()
+    {
         $alert_col = 'col-lg-6 offset-lg-3';
         $profile = User::find(Auth::User()->id);
         return view('backend.profile.profile_edit', compact('profile', 'alert_col'));
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $this->validate($request, [
             'name'            => 'required',
             'email'           => [
@@ -92,7 +100,8 @@ class ProfileController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function change_password() {
+    public function change_password()
+    {
         $alert_col = 'col-lg-6 offset-lg-3';
         return view('backend.profile.change_password', compact('alert_col'));
     }
@@ -104,7 +113,8 @@ class ProfileController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update_password(Request $request) {
+    public function update_password(Request $request)
+    {
         $this->validate($request, [
             'oldpassword' => 'required',
             'password'    => 'required|string|min:6|confirmed',
@@ -119,5 +129,4 @@ class ProfileController extends Controller {
         }
         return back()->with('success', _lang('Password has been changed'));
     }
-
 }

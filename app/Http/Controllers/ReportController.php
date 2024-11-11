@@ -12,15 +12,17 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ReportController extends Controller {
+class ReportController extends Controller
+{
 
 	/**
 	 * Create a new controller instance.
 	 *
 	 * @return void
 	 */
-	public function __construct() {
-		date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+	public function __construct()
+	{
+		date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 	}
 
 	/**
@@ -28,7 +30,8 @@ class ReportController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function account_statement(Request $request) {
+	public function account_statement(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			return view('backend.reports.account_statement');
 		} else if ($request->isMethod('post')) {
@@ -61,7 +64,8 @@ class ReportController extends Controller {
 		}
 	}
 
-	public function loan_report(Request $request) {
+	public function loan_report(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			return view('backend.reports.loan_report');
 		} else if ($request->isMethod('post')) {
@@ -105,7 +109,8 @@ class ReportController extends Controller {
 		}
 	}
 
-	public function loan_due_report(Request $request) {
+	public function loan_due_report(Request $request)
+	{
 		@ini_set('max_execution_time', 0);
 		@set_time_limit(0);
 
@@ -122,7 +127,8 @@ class ReportController extends Controller {
 		return view('backend.reports.loan_due_report', $data);
 	}
 
-	public function transactions_report(Request $request) {
+	public function transactions_report(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			return view('backend.reports.transactions_report');
 		} else if ($request->isMethod('post')) {
@@ -166,7 +172,8 @@ class ReportController extends Controller {
 		}
 	}
 
-	public function expense_report(Request $request) {
+	public function expense_report(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			return view('backend.reports.expense_report');
 		} else if ($request->isMethod('post')) {
@@ -201,7 +208,8 @@ class ReportController extends Controller {
 		}
 	}
 
-	public function account_balances(Request $request) {
+	public function account_balances(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			return view('backend.reports.account_balances');
 		} else if ($request->isMethod('post')) {
@@ -215,7 +223,8 @@ class ReportController extends Controller {
 		}
 	}
 
-	public function revenue_report(Request $request) {
+	public function revenue_report(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			return view('backend.reports.revenue_report');
 		} else if ($request->isMethod('post')) {
@@ -273,10 +282,10 @@ class ReportController extends Controller {
 			$data['currency_id'] = $request->currency_id;
 			return view('backend.reports.revenue_report', $data);
 		}
-
 	}
 
-	public function loan_repayment_report(Request $request) {
+	public function loan_repayment_report(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			return view('backend.reports.loan_repayment_report');
 		} else if ($request->isMethod('post')) {
@@ -297,5 +306,4 @@ class ReportController extends Controller {
 			return view('backend.reports.loan_repayment_report', $data);
 		}
 	}
-
 }

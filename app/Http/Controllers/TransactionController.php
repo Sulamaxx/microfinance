@@ -12,15 +12,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
-class TransactionController extends Controller {
+class TransactionController extends Controller
+{
 
 	/**
 	 * Create a new controller instance.
 	 *
 	 * @return void
 	 */
-	public function __construct() {
-		date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+	public function __construct()
+	{
+		date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 	}
 
 	/**
@@ -28,11 +30,13 @@ class TransactionController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
+	public function index()
+	{
 		return view('backend.transaction.list');
 	}
 
-	public function get_table_data() {
+	public function get_table_data()
+	{
 
 		$transactions = Transaction::select('transactions.*')
 			->with(['member', 'account', 'account.savings_type'])
@@ -64,15 +68,15 @@ class TransactionController extends Controller {
 			}, true)
 			->addColumn('action', function ($transaction) {
 				return '<div class="dropdown text-center">'
-				. '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
-				. '&nbsp;</button>'
-				. '<div class="dropdown-menu">'
-				. '<a class="dropdown-item" href="' . route('transactions.edit', $transaction['id']) . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
-				. '<a class="dropdown-item" href="' . route('transactions.show', $transaction['id']) . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
-				. '<form action="' . route('transactions.destroy', $transaction['id']) . '" method="post">'
-				. csrf_field()
-				. '<input name="_method" type="hidden" value="DELETE">'
-				. '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
+					. '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
+					. '&nbsp;</button>'
+					. '<div class="dropdown-menu">'
+					. '<a class="dropdown-item" href="' . route('transactions.edit', $transaction['id']) . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
+					. '<a class="dropdown-item" href="' . route('transactions.show', $transaction['id']) . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
+					. '<form action="' . route('transactions.destroy', $transaction['id']) . '" method="post">'
+					. csrf_field()
+					. '<input name="_method" type="hidden" value="DELETE">'
+					. '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
 					. '</form>'
 					. '</div>'
 					. '</div>';
@@ -89,7 +93,8 @@ class TransactionController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create(Request $request) {
+	public function create(Request $request)
+	{
 		if (!$request->ajax()) {
 			return view('backend.transaction.create');
 		} else {
@@ -103,7 +108,8 @@ class TransactionController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		$validator = Validator::make($request->all(), [
 			'trans_date' => 'required',
 			'member_id' => 'required',
@@ -154,7 +160,6 @@ class TransactionController extends Controller {
 					->with('error', _lang('Insufficient account balance'))
 					->withInput();
 			}
-
 		} else {
 			if ($request->amount < $accountType->minimum_deposit_amount) {
 				return back()
@@ -180,11 +185,13 @@ class TransactionController extends Controller {
 		if ($transaction->dr_cr == 'dr') {
 			try {
 				$transaction->member->notify(new WithdrawMoney($transaction));
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) {
+			}
 		} else if ($transaction->dr_cr == 'cr') {
 			try {
 				$transaction->member->notify(new DepositMoney($transaction));
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) {
+			}
 		}
 
 		if (!$request->ajax()) {
@@ -192,7 +199,6 @@ class TransactionController extends Controller {
 		} else {
 			return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $transaction, 'table' => '#transactions_table']);
 		}
-
 	}
 
 	/**
@@ -201,7 +207,8 @@ class TransactionController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Request $request, $id) {
+	public function show(Request $request, $id)
+	{
 		$transaction = Transaction::find($id);
 		if (!$request->ajax()) {
 			return view('backend.transaction.view', compact('transaction', 'id'));
@@ -216,7 +223,8 @@ class TransactionController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(Request $request, $id) {
+	public function edit(Request $request, $id)
+	{
 		$transaction = Transaction::find($id);
 		if (!$request->ajax()) {
 			return view('backend.transaction.edit', compact('transaction', 'id'));
@@ -232,7 +240,8 @@ class TransactionController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {
+	public function update(Request $request, $id)
+	{
 		$validator = Validator::make($request->all(), [
 			'trans_date' => 'required',
 			'member_id' => 'required',
@@ -307,7 +316,6 @@ class TransactionController extends Controller {
 		} else {
 			return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $transaction, 'table' => '#transactions_table']);
 		}
-
 	}
 
 	/**
@@ -316,7 +324,8 @@ class TransactionController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id) {
+	public function destroy($id)
+	{
 		DB::beginTransaction();
 
 		$transaction = Transaction::find($id);

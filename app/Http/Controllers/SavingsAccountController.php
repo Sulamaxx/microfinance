@@ -11,15 +11,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Validator;
 
-class SavingsAccountController extends Controller {
+class SavingsAccountController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -27,11 +29,13 @@ class SavingsAccountController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('backend.savings_accounts.list');
     }
 
-    public function get_table_data() {
+    public function get_table_data()
+    {
 
         $savingsaccounts = SavingsAccount::with(['member', 'savings_type', 'savings_type.currency'])
             ->select('savings_accounts.*')
@@ -56,15 +60,15 @@ class SavingsAccountController extends Controller {
             }, true)
             ->addColumn('action', function ($savingsaccount) {
                 return '<div class="dropdown text-center">'
-                . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
-                . '&nbsp;</button>'
-                . '<div class="dropdown-menu">'
-                . '<a class="dropdown-item ajax-modal" href="' . route('savings_accounts.edit', $savingsaccount['id']) . '" data-title="' . _lang('Account Details') . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
-                . '<a class="dropdown-item ajax-modal" href="' . route('savings_accounts.show', $savingsaccount['id']) . '" data-title="' . _lang('Update Account') . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
-                . '<form action="' . route('savings_accounts.destroy', $savingsaccount['id']) . '" method="post">'
-                . csrf_field()
-                . '<input name="_method" type="hidden" value="DELETE">'
-                . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
+                    . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
+                    . '&nbsp;</button>'
+                    . '<div class="dropdown-menu">'
+                    . '<a class="dropdown-item ajax-modal" href="' . route('savings_accounts.edit', $savingsaccount['id']) . '" data-title="' . _lang('Account Details') . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
+                    . '<a class="dropdown-item ajax-modal" href="' . route('savings_accounts.show', $savingsaccount['id']) . '" data-title="' . _lang('Update Account') . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
+                    . '<form action="' . route('savings_accounts.destroy', $savingsaccount['id']) . '" method="post">'
+                    . csrf_field()
+                    . '<input name="_method" type="hidden" value="DELETE">'
+                    . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
                     . '</form>'
                     . '</div>'
                     . '</div>';
@@ -81,7 +85,8 @@ class SavingsAccountController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return back();
         } else {
@@ -95,7 +100,8 @@ class SavingsAccountController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'account_number'     => 'required|unique:savings_accounts|max:50',
             'member_id'          => 'required',
@@ -169,7 +175,6 @@ class SavingsAccountController extends Controller {
                 return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $savingsaccount, 'table' => '#savings_accounts_table']);
             }
         }
-
     }
 
     /**
@@ -178,14 +183,14 @@ class SavingsAccountController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $savingsaccount = SavingsAccount::withoutGlobalScopes(['status'])->find($id);
         if (!$request->ajax()) {
             return view('backend.savings_accounts.view', compact('savingsaccount', 'id'));
         } else {
             return view('backend.savings_accounts.modal.view', compact('savingsaccount', 'id'));
         }
-
     }
 
     /**
@@ -194,14 +199,14 @@ class SavingsAccountController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $savingsaccount = SavingsAccount::withoutGlobalScopes(['status'])->find($id);
         if (!$request->ajax()) {
             return back();
         } else {
             return view('backend.savings_accounts.modal.edit', compact('savingsaccount', 'id'));
         }
-
     }
 
     /**
@@ -211,7 +216,8 @@ class SavingsAccountController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'account_number'     => [
                 'required',
@@ -257,13 +263,15 @@ class SavingsAccountController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $savingsaccount = SavingsAccount::withoutGlobalScopes(['status'])->find($id);
         $savingsaccount->delete();
         return redirect()->route('savings_accounts.index')->with('success', _lang('Deleted Successfully'));
     }
 
-    public function get_account_by_member_id($member_id) {
+    public function get_account_by_member_id($member_id)
+    {
         $savingsaccounts = SavingsAccount::with(['savings_type', 'savings_type.currency'])->where('member_id', $member_id)->get();
         return response()->json(['accounts' => $savingsaccounts]);
     }
