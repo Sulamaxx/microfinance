@@ -15,20 +15,20 @@
                             <td>{{ $branch->name }}</td>
                         </tr>
                         <tr>
-                            <td>{{ _lang('Contact Email') }}</td>
-                            <td>{{ $branch->contact_email }}</td>
+                            <td>{{ _lang('No') }}</td>
+                            <td>{{ $branch->no }}</td>
                         </tr>
                         <tr>
-                            <td>{{ _lang('Contact Phone') }}</td>
-                            <td>{{ $branch->contact_phone }}</td>
+                            <td>{{ _lang('Code') }}</td>
+                            <td>{{ $branch->code }}</td>
                         </tr>
                         <tr>
-                            <td>{{ _lang('Address') }}</td>
-                            <td>{{ $branch->address }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ _lang('Descriptions') }}</td>
-                            <td>{{ $branch->descriptions }}</td>
+                            <td>{{ _lang('Working Days') }}</td>
+                            <td>
+                                @foreach ($branch->weekdays as $day)
+                                    {{ $day }}{{ $loop->last ? '' : ',' }}
+                                @endforeach
+                            </td>
                         </tr>
                     </table>
                 </div>
