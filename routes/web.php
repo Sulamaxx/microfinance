@@ -169,10 +169,12 @@ Route::group(['middleware' => ['install']], function () {
                 // Route::match(['get', 'post'], 'members/accept_request/{id}', [MemberController::class, 'accept_request'])->name('members.accept_request');
                 // Route::get('members/reject_request/{id}', [MemberController::class, 'reject_request'])->name('members.reject_request');
                 // Route::get('members/pending_requests', [MemberController::class, 'pending_requests'])->name('members.pending_requests');
+
                 Route::get('members/get_member_transaction_data/{member_id}', [MemberController::class, 'get_member_transaction_data']);
                 Route::get('members/get_table_data', [MemberController::class, 'get_table_data']);
                 Route::post('members/send_email', [MemberController::class, 'send_email'])->name('members.send_email');
                 Route::post('members/send_sms', [MemberController::class, 'send_sms'])->name('members.send_sms');
+
                 Route::resource('members', MemberController::class)->middleware("demo:PUT|PATCH|DELETE");
 
                 // //Custom Field Controller
@@ -180,9 +182,9 @@ Route::group(['middleware' => ['install']], function () {
                 // Route::get('custom_fields/{table}', [CustomFieldController::class, 'index'])->name('custom_fields.index');
 
                 // //Members Documents
-                // Route::get('member_documents/{member_id}', [MemberDocumentController::class, 'index'])->name('member_documents.index');
-                // Route::get('member_documents/create/{member_id}', [MemberDocumentController::class, 'create'])->name('member_documents.create');
-                // Route::resource('member_documents', MemberDocumentController::class)->except(['index', 'create', 'show']);
+                Route::get('member_documents/{member_id}', [MemberDocumentController::class, 'index'])->name('member_documents.index');
+                Route::get('member_documents/create/{member_id}', [MemberDocumentController::class, 'create'])->name('member_documents.create');
+                Route::resource('member_documents', MemberDocumentController::class)->except(['index', 'create', 'show']);
 
                 // //Savings Accounts
                 // Route::get('savings_accounts/get_account_by_member_id/{member_id}', [SavingsAccountController::class, 'get_account_by_member_id']);
