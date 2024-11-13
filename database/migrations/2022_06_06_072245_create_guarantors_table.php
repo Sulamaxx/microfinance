@@ -15,14 +15,23 @@ class CreateGuarantorsTable extends Migration
     {
         Schema::create('guarantors', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('loan_id')->unsigned();
-            $table->bigInteger('member_id')->unsigned();
-            $table->bigInteger('savings_account_id')->unsigned();
-            $table->decimal('amount', 10, 2);
+            $table->string('title', 10);
+            $table->string('full_name', 191);
+            $table->string(
+                'name_with_initial',
+                191
+            );
+            $table->string('nic', 20);
+            $table->string('mobile1', 15);
+            $table->string('mobile2', 15)->nullable();
+            $table->string('address1', 191);
+            $table->string('address2', 191);
+            $table->string('city', 100);
+            $table->string('state', 100);
+            $table->string('zip', 20);
+            $table->string('photo', 191)->nullable();
+            $table->string('docImage', 191)->nullable();
             $table->timestamps();
-
-            $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
-            $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
         });
     }
 

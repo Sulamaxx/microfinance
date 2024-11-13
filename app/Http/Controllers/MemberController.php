@@ -2,25 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\MembersImport;
-use App\Mail\GeneralMail;
-use App\Models\CustomField;
 use App\Models\Member;
 use App\Models\Sponsor;
 use App\Models\Transaction;
-use App\Models\User;
-use App\Notifications\MemberRequestAccepted;
-use App\Utilities\Overrider;
-use App\Utilities\SmsHelper;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
@@ -101,13 +89,7 @@ class MemberController extends Controller
      */
     public function create(Request $request)
     {
-        $customFields = CustomField::where('table', 'members')
-            ->where('status', 1)
-            ->orderBy("id", "asc")
-            ->get();
-
-        $memberNo = get_option('starting_member_no');
-        return view('backend.member.create', compact('customFields', 'memberNo'));
+        return view('backend.member.create');
     }
 
     /**
@@ -375,7 +357,7 @@ class MemberController extends Controller
         $member = Member::withoutGlobalScopes(['statua'])
             ->with('sponsor')
             ->find($id);
-        Log::info($member);
+
         if (!$request->ajax()) {
             return view('backend.member.edit', compact('member', 'id'));
         } else {

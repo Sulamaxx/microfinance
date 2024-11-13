@@ -5,26 +5,23 @@
         <div class="col-lg-12">
             <div class="card no-export">
                 <div class="card-header d-flex align-items-center">
-                    <span class="panel-title">{{ _lang('Member List') }}</span>
+                    <span class="panel-title">{{ _lang('Guarantor List') }}</span>
 
                     <div class="ml-auto">
-                        {{-- <a class="btn btn-dark btn-xs" href="{{ route('members.import') }}"><i class="ti-import mr-1"></i>{{ _lang('Bulk Import') }}</a> --}}
-                        <a class="btn btn-primary btn-xs" href="{{ route('members.create') }}"><i
+                        <a class="btn btn-primary btn-xs" href="{{ route('guarantor_managements.create') }}"><i
                                 class="ti-plus mr-1"></i>{{ _lang('Add New') }}</a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="members_table" class="table table-bordered">
+                    <table id="guarantors_table" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>{{ _lang('NIC') }}</th>
-                                <th>{{ _lang('Customer ID') }}</th>
                                 <th>{{ _lang('Title') }}</th>
                                 <th>{{ _lang('Full Name') }}</th>
                                 <th>{{ _lang('Name With Initial') }}</th>
-                                <th>{{ _lang('Contact No') }}</th>
-                                <th>{{ _lang('Mobile No') }}</th>
-                                <th>{{ _lang('Center') }}</th>
+                                <th>{{ _lang('Mobile No 1') }}</th>
+                                <th>{{ _lang('Mobile No 2') }}</th>
                                 <th>{{ _lang('Status') }}</th>
                                 <th class="text-center">{{ _lang('Action') }}</th>
                             </tr>
@@ -43,17 +40,13 @@
         (function($) {
             "use strict";
 
-            $('#members_table').DataTable({
+            $('#guarantors_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ url('admin/members/get_table_data') }}',
+                ajax: '{{ url('admin/guarantor_managements/get_table_data') }}',
                 "columns": [{
                         data: 'nic',
                         name: 'nic'
-                    },
-                    {
-                        data: 'customer_id',
-                        name: 'customer_id'
                     },
                     {
                         data: 'title',
@@ -68,16 +61,12 @@
                         name: 'name_with_initial'
                     },
                     {
-                        data: 'contact_number',
-                        name: 'contact_number'
-                    },
-                    {
                         data: 'mobile1',
                         name: 'mobile1'
                     },
                     {
-                        data: 'branch.name',
-                        name: 'branch.name'
+                        data: 'mobile2',
+                        name: 'mobile2'
                     },
                     {
                         data: 'status',

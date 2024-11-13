@@ -3,6 +3,7 @@
     $withdraw_requests = request_count('withdraw_requests', true);
     $member_requests = request_count('member_requests', true);
     $pending_loans = request_count('pending_loans', true);
+    $guarantor_managements_requests = request_count('guarantor_managements_requests', true);
 @endphp
 
 {{-- temporary disable --}}
@@ -24,16 +25,29 @@
         </li>
         <li class="nav-item"><a class="nav-link" href="{{ route('members.create') }}">{{ _lang('Add Member') }}</a></li>
         {{-- <li class="nav-item"><a class="nav-link" href="{{ route('members.import') }}">{{ _lang('Bulk Import') }}</a> --}}
-</li>
-{{-- <li class="nav-item"><a class="nav-link"
+        {{-- </li> --}}
+        {{-- <li class="nav-item"><a class="nav-link"
         href="{{ route('custom_fields.index', ['members']) }}">{{ _lang('Custom Fields') }}</a></li> --}}
-{{-- <li class="nav-item">
+        {{-- <li class="nav-item">
     <a class="nav-link" href="{{ route('members.pending_requests') }}">
         {{ _lang('Member Requests') }}
         {!! xss_clean($member_requests) !!}
     </a>
 </li> --}}
-</ul>
+    </ul>
+</li>
+
+<li>
+    <a href="javascript: void(0);"><i class="fas fa-user-friends"></i><span>{{ _lang('Guarantors') }}
+            {!! xss_clean($guarantor_managements_requests) !!}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+    <ul class="nav-second-level" aria-expanded="false">
+        <li class="nav-item"><a class="nav-link"
+                href="{{ route('guarantor_managements.index') }}">{{ _lang('View Guarantor') }}</a>
+        </li>
+        <li class="nav-item"><a class="nav-link"
+                href="{{ route('guarantor_managements.create') }}">{{ _lang('Add Guarantor') }}</a>
+        </li>
+    </ul>
 </li>
 
 <li>

@@ -811,8 +811,14 @@ if (!function_exists('request_count')) {
         } else if ($request == 'withdraw_requests') {
             $notification_count = \App\Models\WithdrawRequest::where('status', 0)->count();
         } else if ($request == 'member_requests') {
-            $notification_count = \App\Models\Member::withoutGlobalScopes(['status'])->where('status', 0)->count();
+            $notification_count = 0;
+            // $notification_count = \App\Models\Member::withoutGlobalScopes(['status'])->where('status', 0)->count();
+        } else if ($request == 'guarantor_managements_requests') {
+            $notification_count = 0;
+            // $notification_count = \App\Models\Guarantor::withoutGlobalScopes(['status'])->where('status', 0)->count();
         }
+
+
 
         if ($html == false) {
             return $notification_count;

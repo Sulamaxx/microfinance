@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GuarantorManagementController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoanController;
@@ -175,7 +176,10 @@ Route::group(['middleware' => ['install']], function () {
                 Route::post('members/send_email', [MemberController::class, 'send_email'])->name('members.send_email');
                 Route::post('members/send_sms', [MemberController::class, 'send_sms'])->name('members.send_sms');
 
-                Route::resource('members', MemberController::class)->middleware("demo:PUT|PATCH|DELETE");
+                Route::resource('members', MemberController::class);
+
+                Route::get('guarantor_managements/get_table_data', [GuarantorManagementController::class, 'get_table_data']);
+                Route::resource('guarantor_managements', GuarantorManagementController::class);
 
                 // //Custom Field Controller
                 // Route::resource('custom_fields', CustomFieldController::class)->except(['index', 'show'])->middleware("demo");

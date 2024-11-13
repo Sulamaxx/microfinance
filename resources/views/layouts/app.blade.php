@@ -298,6 +298,9 @@
                 $("#main_alert > span.msg").html(" {{ session('success') }} ");
                 $("#main_alert").addClass("alert-success").removeClass("alert-danger");
                 $("#main_alert").css('display', 'block');
+                setTimeout(() => {
+                    $("#main_alert").css('display', 'none');
+                }, 5000);
             @endif
 
             //Show Single Error Message
@@ -305,6 +308,9 @@
                 $("#main_alert > span.msg").html(" {{ session('error') }} ");
                 $("#main_alert").addClass("alert-danger").removeClass("alert-success");
                 $("#main_alert").css('display', 'block');
+                setTimeout(() => {
+                    $("#main_alert").css('display', 'none');
+                }, 5000);
             @endif
 
 
