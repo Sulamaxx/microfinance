@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
@@ -14,18 +15,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class TransferController extends Controller {
+class TransferController extends Controller
+{
 
 	/**
 	 * Create a new controller instance.
 	 *
 	 * @return void
 	 */
-	public function __construct() {
-		date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+	public function __construct()
+	{
+		date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 	}
 
-	public function own_account_transfer(Request $request) {
+	public function own_account_transfer(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			$alert_col = 'col-lg-8 offset-lg-2';
 			$accounts = SavingsAccount::with('savings_type')
@@ -139,11 +143,11 @@ class TransferController extends Controller {
 			} else {
 				return redirect()->route('transfer.own_account_transfer')->with('error', _lang('Something went wrong, Please try again!'));
 			}
-
 		}
 	}
 
-	public function other_account_transfer(Request $request) {
+	public function other_account_transfer(Request $request)
+	{
 		if ($request->isMethod('get')) {
 			$alert_col = 'col-lg-8 offset-lg-2';
 			$accounts = SavingsAccount::with('savings_type')
@@ -265,7 +269,8 @@ class TransferController extends Controller {
 
 			try {
 				$credit->member->notify(new TransferMoney($credit));
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) {
+			}
 
 			if ($credit->id > 0) {
 				return redirect()->route('transfer.other_account_transfer')->with('success', _lang('Money transfered successfully'));
@@ -281,7 +286,8 @@ class TransferController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function transaction_details(Request $request, $id) {
+	public function transaction_details(Request $request, $id)
+	{
 		$transaction = Transaction::find($id);
 		if (!$request->ajax()) {
 			return view('backend.transaction.view', compact('transaction', 'id'));
@@ -296,7 +302,8 @@ class TransferController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function transaction_requests(Request $request) {
+	public function transaction_requests(Request $request)
+	{
 		$member_id = auth()->user()->member->id;
 		$deposit_requests = DepositRequest::where('member_id', $member_id)->get();
 		$withdraw_requests = WithdrawRequest::where('member_id', $member_id)->get();
@@ -304,12 +311,14 @@ class TransferController extends Controller {
 		return view('backend.customer_portal.transaction-requests', compact('deposit_requests', 'withdraw_requests'));
 	}
 
-	public function get_exchange_amount($from, $to, $amount) {
+	public function get_exchange_amount($from, $to, $amount)
+	{
 		$amount = convert_currency($from, $to, $amount);
 		return response()->json(['amount' => $amount]);
 	}
 
-	public function get_final_amount(Request $request) {
+	public function get_final_amount(Request $request)
+	{
 		$from = $request->from;
 		$to = $request->to;
 		$amount = $request->amount;
@@ -347,7 +356,5 @@ class TransferController extends Controller {
 			}
 			return response()->json(['result' => true, 'amount' => $amount]);
 		}
-
 	}
-
 }

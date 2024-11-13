@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
+use App\Models\Role;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -24,7 +28,8 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $users = User::where('user_type', 'admin')
             ->orWhere('user_type', 'user')
             ->orderBy('name', 'asc')
@@ -37,9 +42,13 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
+        $branches = Branch::orderBy('name', 'asc')->get();
+        $roles = Role::orderBy('name', 'asc')->get();
+
         if (!$request->ajax()) {
-            return view('backend.user.create');
+            return view('backend.user.create', compact('branches', 'roles'));
         } else {
             return back();
         }
@@ -51,7 +60,8 @@ class UserController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'            => 'required|max:255',
             'email'           => 'required|email|unique:users|max:255',
@@ -98,11 +108,10 @@ class UserController extends Controller {
         $user->profile_picture = '<img src="' . profile_picture($user->profile_picture) . '" class="thumb-sm mr-2">';
 
         if (!$request->ajax()) {
-            return redirect()->route('users.create')->with('success', _lang('Saved Sucessfully'));
+            return redirect()->route('users.index')->with('success', _lang('Saved Sucessfully'));
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Sucessfully'), 'data' => $user, 'table' => '#users_table']);
         }
-
     }
 
     /**
@@ -111,14 +120,14 @@ class UserController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $user = User::find($id);
         if (!$request->ajax()) {
             return view('backend.user.view', compact('user', 'id'));
         } else {
             return view('backend.user.modal.view', compact('user', 'id'));
         }
-
     }
 
     /**
@@ -127,14 +136,14 @@ class UserController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $user = User::find($id);
         if (!$request->ajax()) {
             return view('backend.user.edit', compact('user', 'id'));
         } else {
             return back();
         }
-
     }
 
     /**
@@ -144,7 +153,8 @@ class UserController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'            => 'required|max:255',
             'email'           => [
@@ -201,7 +211,6 @@ class UserController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Sucessfully'), 'data' => $user, 'table' => '#users_table']);
         }
-
     }
 
     /**
@@ -210,7 +219,8 @@ class UserController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $user = User::find($id);
         $user->delete();
         return redirect()->route('users.index')->with('success', _lang('Deleted Sucessfully'));

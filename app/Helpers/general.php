@@ -418,7 +418,7 @@ if (!function_exists('get_array_data')) {
 if (!function_exists('update_option')) {
     function update_option($name, $value)
     {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 
         $data               = array();
         $data['value']      = $value;
@@ -811,8 +811,14 @@ if (!function_exists('request_count')) {
         } else if ($request == 'withdraw_requests') {
             $notification_count = \App\Models\WithdrawRequest::where('status', 0)->count();
         } else if ($request == 'member_requests') {
-            $notification_count = \App\Models\Member::withoutGlobalScopes(['status'])->where('status', 0)->count();
+            $notification_count = 0;
+            // $notification_count = \App\Models\Member::withoutGlobalScopes(['status'])->where('status', 0)->count();
+        } else if ($request == 'guarantor_managements_requests') {
+            $notification_count = 0;
+            // $notification_count = \App\Models\Guarantor::withoutGlobalScopes(['status'])->where('status', 0)->count();
         }
+
+
 
         if ($html == false) {
             return $notification_count;
@@ -872,7 +878,7 @@ if (!function_exists('file_icon')) {
 if (!function_exists('update_currency_exchange_rate')) {
     function update_currency_exchange_rate()
     {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 
         $start = new \Carbon\Carbon(get_option('currency_update_time', date("Y-m-d H:i:s", strtotime('-24 hours', time()))));
         $end   = \Carbon\Carbon::now();

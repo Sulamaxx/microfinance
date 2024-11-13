@@ -6,15 +6,17 @@ use App\Models\NavigationItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class NavigationItemController extends Controller {
+class NavigationItemController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -22,7 +24,8 @@ class NavigationItemController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $navigationitems = NavigationItem::all()->sortByDesc("id");
         return view('backend.site_navigation.navigation_item.list', compact('navigationitems'));
     }
@@ -32,7 +35,8 @@ class NavigationItemController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $navigation_id) {
+    public function create(Request $request, $navigation_id)
+    {
         if (!$request->ajax()) {
             return view('backend.site_navigation.navigation_item.create', compact('navigation_id'));
         } else {
@@ -46,7 +50,8 @@ class NavigationItemController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $navigation_id) {
+    public function store(Request $request, $navigation_id)
+    {
         $validator = Validator::make($request->all(), [
             'trans.name' => 'required',
             'type'       => 'required',
@@ -86,7 +91,6 @@ class NavigationItemController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Sucessfully'), 'data' => $navigationitem, 'table' => '#navigation_items_table']);
         }
-
     }
 
     /**
@@ -95,14 +99,14 @@ class NavigationItemController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $navigationitem = NavigationItem::find($id);
         if (!$request->ajax()) {
             return view('backend.site_navigation.navigation_item.edit', compact('navigationitem', 'id'));
         } else {
             return view('backend.site_navigation.navigation_item.modal.edit', compact('navigationitem', 'id'));
         }
-
     }
 
     /**
@@ -112,7 +116,8 @@ class NavigationItemController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'trans.name' => 'required',
             'type'       => 'required',
@@ -150,7 +155,6 @@ class NavigationItemController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Sucessfully'), 'data' => $navigationitem, 'table' => '#navigation_items_table']);
         }
-
     }
 
     /**
@@ -159,7 +163,8 @@ class NavigationItemController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $navigationitem = NavigationItem::find($id);
         $navigationitem->delete();
         return back()->with('success', _lang('Deleted Sucessfully'));

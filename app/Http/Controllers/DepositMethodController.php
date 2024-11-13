@@ -8,15 +8,17 @@ use App\Models\DepositMethod;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class DepositMethodController extends Controller {
+class DepositMethodController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -24,7 +26,8 @@ class DepositMethodController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $depositmethods = DepositMethod::all()->sortByDesc("id");
         return view('backend.deposit_method.list', compact('depositmethods'));
     }
@@ -34,7 +37,8 @@ class DepositMethodController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return view('backend.deposit_method.create');
         } else {
@@ -48,7 +52,8 @@ class DepositMethodController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'                 => 'required',
             'image'                => 'nullable|image',
@@ -105,7 +110,6 @@ class DepositMethodController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $depositmethod, 'table' => '#deposit_methods_table']);
         }
-
     }
 
     /**
@@ -114,14 +118,14 @@ class DepositMethodController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $depositmethod = DepositMethod::find($id);
         if (!$request->ajax()) {
             return view('backend.deposit_method.edit', compact('depositmethod', 'id'));
         } else {
             return view('backend.deposit_method.modal.edit', compact('depositmethod', 'id'));
         }
-
     }
 
     /**
@@ -131,7 +135,8 @@ class DepositMethodController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'                 => 'required',
             'image'                => 'nullable|image',
@@ -197,7 +202,6 @@ class DepositMethodController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $depositmethod, 'table' => '#deposit_methods_table']);
         }
-
     }
 
     /**
@@ -206,7 +210,8 @@ class DepositMethodController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $depositmethod = DepositMethod::find($id);
         $depositmethod->delete();
         return redirect()->route('deposit_methods.index')->with('success', _lang('Deleted Successfully'));

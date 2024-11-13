@@ -18,8 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     // temporary disable
-    // public const HOME = '/dashboard';
-    public const HOME = '/admin/loans/calculator';
+    public const HOME = '/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

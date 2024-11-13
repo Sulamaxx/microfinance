@@ -12,15 +12,17 @@ use DB;
 use Illuminate\Http\Request;
 use Validator;
 
-class LoanPaymentController extends Controller {
+class LoanPaymentController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -28,11 +30,13 @@ class LoanPaymentController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('backend.loan_payment.list');
     }
 
-    public function get_table_data() {
+    public function get_table_data()
+    {
         $loanpayments = LoanPayment::select('loan_payments.*')
             ->with('loan')
             ->orderBy("loan_payments.id", "desc");
@@ -46,11 +50,11 @@ class LoanPaymentController extends Controller {
             })
             ->addColumn('action', function ($loanpayment) {
                 return '<form action="' . route('loan_payments.destroy', $loanpayment['id']) . '" class="text-center" method="post">'
-                . '<a href="' . route('loan_payments.show', $loanpayment['id']) . '" class="btn btn-primary btn-xs"><i class="ti-eye"></i>&nbsp;' . _lang('View') . '</a>&nbsp;'
-                . '<a href="' . route('loans.show', $loanpayment['loan_id']) . '" class="btn btn-success btn-xs"><i class="ti-file"></i>&nbsp;' . _lang('Loan Details') . '</a>&nbsp;'
-                . csrf_field()
-                . '<input name="_method" type="hidden" value="DELETE">'
-                . '<button class="btn btn-danger btn-xs btn-remove" type="submit"><i class="ti-trash"></i>&nbsp;' . _lang('Delete') . '</button>'
+                    . '<a href="' . route('loan_payments.show', $loanpayment['id']) . '" class="btn btn-primary btn-xs"><i class="ti-eye"></i>&nbsp;' . _lang('View') . '</a>&nbsp;'
+                    . '<a href="' . route('loans.show', $loanpayment['loan_id']) . '" class="btn btn-success btn-xs"><i class="ti-file"></i>&nbsp;' . _lang('Loan Details') . '</a>&nbsp;'
+                    . csrf_field()
+                    . '<input name="_method" type="hidden" value="DELETE">'
+                    . '<button class="btn btn-danger btn-xs btn-remove" type="submit"><i class="ti-trash"></i>&nbsp;' . _lang('Delete') . '</button>'
                     . '</form>';
             })
             ->setRowId(function ($loanpayment) {
@@ -65,7 +69,8 @@ class LoanPaymentController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $alert_col = 'col-lg-8 offset-lg-2';
         return view('backend.loan_payment.create', compact('alert_col'));
     }
@@ -76,7 +81,8 @@ class LoanPaymentController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'loan_id'          => 'required',
             'paid_at'          => 'required',
@@ -148,7 +154,7 @@ class LoanPaymentController extends Controller {
                     ->orderBy('id', 'asc')
                     ->get();
 
-                if($upCommingRepayments->isEmpty()){
+                if ($upCommingRepayments->isEmpty()) {
                     return back()->with('error', _lang('You must pay the full repayment because this is your last repayment schedule'));
                 }
 
@@ -191,7 +197,6 @@ class LoanPaymentController extends Controller {
         DB::commit();
 
         return redirect()->route('loan_payments.index')->with('success', _lang('Loan Payment Made Sucessfully'));
-
     }
 
     /**
@@ -200,17 +205,18 @@ class LoanPaymentController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $loanpayment = LoanPayment::find($id);
         if (!$request->ajax()) {
             return view('backend.loan_payment.view', compact('loanpayment', 'id'));
         } else {
             return view('backend.loan_payment.modal.view', compact('loanpayment', 'id'));
         }
-
     }
 
-    public function get_repayment_by_loan_id($loan_id) {
+    public function get_repayment_by_loan_id($loan_id)
+    {
         $repayments = LoanRepayment::where('loan_id', $loan_id)
             ->where('status', 0)
             ->orderBy('id', 'asc')
@@ -225,7 +231,8 @@ class LoanPaymentController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         DB::beginTransaction();
 
         $loanpayment = LoanPayment::find($id);

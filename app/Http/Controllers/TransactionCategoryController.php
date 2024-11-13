@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class TransactionCategoryController extends Controller {
+class TransactionCategoryController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -23,7 +25,8 @@ class TransactionCategoryController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $transactioncategorys = TransactionCategory::withoutGlobalScopes()->orderBy("name")->get();
         return view('backend.transaction_category.list', compact('transactioncategorys'));
     }
@@ -33,7 +36,8 @@ class TransactionCategoryController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return back();
         } else {
@@ -47,7 +51,8 @@ class TransactionCategoryController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'       => 'required|max:30|not_in:deposit,withdraw,Account Maintenance Fee|unique:transaction_categories',
             'related_to' => 'required|in:dr,cr',
@@ -82,7 +87,6 @@ class TransactionCategoryController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $transactioncategory, 'table' => '#transaction_categories_table']);
         }
-
     }
 
     /**
@@ -91,7 +95,8 @@ class TransactionCategoryController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $transactioncategory = TransactionCategory::withoutGlobalScopes()->find($id);
         if (!$request->ajax()) {
             return back();
@@ -106,7 +111,8 @@ class TransactionCategoryController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $transactioncategory = TransactionCategory::withoutGlobalScopes()->find($id);
         if (!$request->ajax()) {
             return back();
@@ -122,7 +128,8 @@ class TransactionCategoryController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'       => 'required|max:30',
             'name'       => [
@@ -163,10 +170,10 @@ class TransactionCategoryController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $transactioncategory, 'table' => '#transaction_categories_table']);
         }
-
     }
 
-    public function get_category_by_type($type = 'dr') {
+    public function get_category_by_type($type = 'dr')
+    {
         $categories = TransactionCategory::selectRaw('name as value, name, related_to')->where('related_to', $type)->get()->toArray();
 
         if ($type == 'dr') {
@@ -185,7 +192,8 @@ class TransactionCategoryController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $transactioncategory = TransactionCategory::find($id);
         $transactioncategory->delete();
         return redirect()->route('transaction_categories.index')->with('success', _lang('Deleted Successfully'));

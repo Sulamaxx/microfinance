@@ -8,15 +8,17 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ReportController extends Controller {
+class ReportController extends Controller
+{
 
 	/**
 	 * Create a new controller instance.
 	 *
 	 * @return void
 	 */
-	public function __construct() {
-		date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+	public function __construct()
+	{
+		date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 	}
 
 	/**
@@ -24,7 +26,8 @@ class ReportController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function account_statement(Request $request) {
+	public function account_statement(Request $request)
+	{
 		$accounts = SavingsAccount::with('savings_type')
 			->where('member_id', auth()->user()->member->id)
 			->get();
@@ -69,7 +72,8 @@ class ReportController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function transactions_report(Request $request) {
+	public function transactions_report(Request $request)
+	{
 		$accounts = SavingsAccount::with('savings_type')
 			->where('member_id', auth()->user()->member->id)
 			->get();
@@ -116,12 +120,11 @@ class ReportController extends Controller {
 			$data['accounts'] = $accounts;
 			return view('backend.customer_portal.reports.all_transactions', $data);
 		}
-
 	}
 
-	public function account_balances(Request $request) {
+	public function account_balances(Request $request)
+	{
 		$accounts = get_account_details(auth()->user()->member->id);
 		return view('backend.customer_portal.reports.account_balances', compact('accounts'));
 	}
-
 }

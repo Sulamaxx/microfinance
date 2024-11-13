@@ -15,23 +15,24 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
-            $table->bigInteger('branch_id')->nullable();
-            $table->bigInteger('user_id')->nullable();
-            $table->string('email', 100)->nullable();
-            $table->string('country_code', 10)->nullable();
-            $table->string('mobile', 50)->nullable();
-            $table->string('business_name', 100)->nullable();
-            $table->string('member_no', 50)->nullable();
-            $table->string('gender', 10)->nullable();
-            $table->string('city', 191)->nullable();
-            $table->string('state', 191)->nullable();
-            $table->string('zip', 50)->nullable();
-            $table->text('address')->nullable();
-            $table->string('credit_source', 191)->nullable();
+            $table->string('title', 10);
+            $table->string('customer_id', 50)->unique();
+            $table->string('civil_status', 20);
+            $table->string('gender', 10);
+            $table->string('full_name', 191);
+            $table->string('name_with_initial', 191);
+            $table->string('nic', 20)->unique();
+            $table->date('dob');
+            $table->string('contact_number', 15);
+            $table->string('mobile1', 15);
+            $table->string('mobile2', 15)->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->string('address1', 191);
+            $table->string('address2', 191);
+            $table->string('city', 100);
+            $table->string('state', 100);
+            $table->string('zip', 20);
             $table->string('photo', 191)->nullable();
-            $table->text('custom_fields')->nullable();
             $table->timestamps();
         });
     }

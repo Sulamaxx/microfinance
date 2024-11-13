@@ -8,15 +8,17 @@ use App\Models\SavingsAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class GuarantorController extends Controller {
+class GuarantorController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -24,7 +26,8 @@ class GuarantorController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return back();
         } else {
@@ -38,7 +41,8 @@ class GuarantorController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $loan = Loan::find($request->loan_id);
 
         $validator = Validator::make($request->all(), [
@@ -98,7 +102,6 @@ class GuarantorController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $guarantor, 'table' => '#guarantors_table']);
         }
-
     }
 
     /**
@@ -107,7 +110,8 @@ class GuarantorController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $guarantor = Guarantor::find($id);
         if (!$request->ajax()) {
             return back();
@@ -123,7 +127,8 @@ class GuarantorController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $loan = Loan::find($request->loan_id);
 
         $validator = Validator::make($request->all(), [
@@ -183,7 +188,6 @@ class GuarantorController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $guarantor, 'table' => '#guarantors_table']);
         }
-
     }
 
     /**
@@ -192,7 +196,8 @@ class GuarantorController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $guarantor = Guarantor::find($id);
         $guarantor->delete();
         return back()->with('success', _lang('Deleted Successfully'));

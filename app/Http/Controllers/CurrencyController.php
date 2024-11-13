@@ -6,15 +6,17 @@ use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CurrencyController extends Controller {
+class CurrencyController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -22,7 +24,8 @@ class CurrencyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $currencys = Currency::all()->sortByDesc("id");
         return view('backend.currency.list', compact('currencys'));
     }
@@ -32,7 +35,8 @@ class CurrencyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return view('backend.currency.create');
         } else {
@@ -46,7 +50,8 @@ class CurrencyController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'          => 'required|min:3|max:3',
             'exchange_rate' => 'required|numeric',
@@ -92,7 +97,6 @@ class CurrencyController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $currency, 'table' => '#currency_table']);
         }
-
     }
 
     /**
@@ -101,14 +105,14 @@ class CurrencyController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $currency = Currency::find($id);
         if (!$request->ajax()) {
             return view('backend.currency.view', compact('currency', 'id'));
         } else {
             return view('backend.currency.modal.view', compact('currency', 'id'));
         }
-
     }
 
     /**
@@ -117,14 +121,14 @@ class CurrencyController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $currency = Currency::find($id);
         if (!$request->ajax()) {
             return view('backend.currency.edit', compact('currency', 'id'));
         } else {
             return view('backend.currency.modal.edit', compact('currency', 'id'));
         }
-
     }
 
     /**
@@ -134,7 +138,8 @@ class CurrencyController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'          => 'required|min:3|max:3',
             'exchange_rate' => 'required|numeric',
@@ -180,7 +185,6 @@ class CurrencyController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $currency, 'table' => '#currency_table']);
         }
-
     }
 
     /**
@@ -189,7 +193,8 @@ class CurrencyController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $currency = Currency::find($id);
         if ($currency->base_currency == 1) {
             return redirect()->route('currency.index')->with('error', _lang('You can not remove base currency !'));

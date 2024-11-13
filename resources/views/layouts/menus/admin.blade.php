@@ -3,33 +3,52 @@
     $withdraw_requests = request_count('withdraw_requests', true);
     $member_requests = request_count('member_requests', true);
     $pending_loans = request_count('pending_loans', true);
+    $guarantor_managements_requests = request_count('guarantor_managements_requests', true);
 @endphp
 
 {{-- temporary disable --}}
 
-{{-- <li>
-	<a href="{{ route('dashboard.index') }}"><i class="ti-dashboard"></i><span>{{ _lang('Dashboard') }}</span></a>
+<li>
+    <a href="{{ route('dashboard.index') }}"><i class="ti-dashboard"></i><span>{{ _lang('Dashboard') }}</span></a>
+</li>
+
+
+<li>
+    <a href="{{ route('branches.index') }}"><i class="fas fa-building"></i><span>{{ _lang('Centers') }}</span></a>
 </li>
 
 <li>
-	<a href="{{ route('branches.index') }}"><i class="fas fa-building"></i><span>{{ _lang('Branches') }}</span></a>
-</li>
-
-<li>
-	<a href="javascript: void(0);"><i class="fas fa-user-friends"></i><span>{{ _lang('Members') }} {!! xss_clean($member_requests) !!}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-	<ul class="nav-second-level" aria-expanded="false">
-		<li class="nav-item"><a class="nav-link" href="{{ route('members.index') }}">{{ _lang('View Members') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('members.create') }}">{{ _lang('Add Member') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('members.import') }}">{{ _lang('Bulk Import') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('custom_fields.index', ['members']) }}">{{ _lang('Custom Fields') }}</a></li>
-		<li class="nav-item">
-			<a class="nav-link" href="{{ route('members.pending_requests') }}">
-			{{ _lang('Member Requests') }}
-			{!! xss_clean($member_requests) !!}
-			</a>
-		</li>
-	</ul>
+    <a href="javascript: void(0);"><i class="fas fa-user-friends"></i><span>{{ _lang('Members') }}
+            {!! xss_clean($member_requests) !!}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+    <ul class="nav-second-level" aria-expanded="false">
+        <li class="nav-item"><a class="nav-link" href="{{ route('members.index') }}">{{ _lang('View Members') }}</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('members.create') }}">{{ _lang('Add Member') }}</a></li>
+        {{-- <li class="nav-item"><a class="nav-link" href="{{ route('members.import') }}">{{ _lang('Bulk Import') }}</a> --}}
+        {{-- </li> --}}
+        {{-- <li class="nav-item"><a class="nav-link"
+        href="{{ route('custom_fields.index', ['members']) }}">{{ _lang('Custom Fields') }}</a></li> --}}
+        {{-- <li class="nav-item">
+    <a class="nav-link" href="{{ route('members.pending_requests') }}">
+        {{ _lang('Member Requests') }}
+        {!! xss_clean($member_requests) !!}
+    </a>
 </li> --}}
+    </ul>
+</li>
+
+<li>
+    <a href="javascript: void(0);"><i class="fas fa-user-friends"></i><span>{{ _lang('Guarantors') }}
+            {!! xss_clean($guarantor_managements_requests) !!}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+    <ul class="nav-second-level" aria-expanded="false">
+        <li class="nav-item"><a class="nav-link"
+                href="{{ route('guarantor_managements.index') }}">{{ _lang('View Guarantor') }}</a>
+        </li>
+        <li class="nav-item"><a class="nav-link"
+                href="{{ route('guarantor_managements.create') }}">{{ _lang('Add Guarantor') }}</a>
+        </li>
+    </ul>
+</li>
 
 <li>
     <a href="javascript: void(0);"><i class="fas fa-hand-holding-usd"></i><span>{{ _lang('Loans') }}
@@ -49,6 +68,21 @@
 		<li class="nav-item"><a class="nav-link" href="{{ route('custom_fields.index', ['loans']) }}">{{ _lang('Custom Fields') }}</a></li> --}}
     </ul>
 </li>
+
+<li>
+    <a href="{{ route('users.index') }}"><i class="ti-user"></i><span>{{ _lang('User Management') }}</span></a>
+</li>
+
+{{-- <li>
+    <a href="javascript: void(0);"><i class="ti-user"></i><span>{{ _lang('User Management') }}</span><span
+            class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+    <ul class="nav-second-level" aria-expanded="false">
+        <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">{{ _lang('All Users') }}</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('roles.index') }}">{{ _lang('User Roles') }}</a></li>
+        <li class="nav-item"><a class="nav-link"
+                href="{{ route('permission.index') }}">{{ _lang('Access Control') }}</a></li>
+    </ul>
+</li> --}}
 
 {{-- <li><a href="{{ route('loan_payments.index') }}"><i class="fas fa-receipt"></i><span>{{ _lang('Repayments') }}</span></a></li> --}}
 
@@ -112,14 +146,7 @@
 	<a href="{{ route('withdraw_methods.index') }}"><i class="fas fa-clipboard-list"></i><span>{{ _lang('Withdraw Methods') }}</span></a>
 </li>
 
-<li>
-	<a href="javascript: void(0);"><i class="ti-user"></i><span>{{ _lang('User Management') }}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-	<ul class="nav-second-level" aria-expanded="false">
-		<li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">{{ _lang('All Users') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('roles.index') }}">{{ _lang('User Roles') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('permission.index') }}">{{ _lang('Access Control') }}</a></li>
-	</ul>
-</li>
+
 
 <li>
 	<a href="javascript: void(0);"><i class="ti-world"></i><span>{{ _lang('Languages') }}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>

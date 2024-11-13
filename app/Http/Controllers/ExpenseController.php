@@ -7,15 +7,17 @@ use DataTables;
 use Illuminate\Http\Request;
 use Validator;
 
-class ExpenseController extends Controller {
+class ExpenseController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -23,11 +25,13 @@ class ExpenseController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         return view('backend.expense.list');
     }
 
-    public function get_table_data() {
+    public function get_table_data()
+    {
 
         $currency = currency(get_base_currency());
 
@@ -41,15 +45,15 @@ class ExpenseController extends Controller {
             })
             ->addColumn('action', function ($expense) {
                 return '<div class="dropdown text-center">'
-                . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
-                . '&nbsp;</button>'
-                . '<div class="dropdown-menu">'
-                . '<a class="dropdown-item ajax-modal" href="' . route('expenses.edit', $expense['id']) . '" data-title="' . _lang('Expense Details') . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
-                . '<a class="dropdown-item ajax-modal" href="' . route('expenses.show', $expense['id']) . '" data-title="' . _lang('Update Expense') . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
-                . '<form action="' . route('expenses.destroy', $expense['id']) . '" method="post">'
-                . csrf_field()
-                . '<input name="_method" type="hidden" value="DELETE">'
-                . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
+                    . '<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">' . _lang('Action')
+                    . '&nbsp;</button>'
+                    . '<div class="dropdown-menu">'
+                    . '<a class="dropdown-item ajax-modal" href="' . route('expenses.edit', $expense['id']) . '" data-title="' . _lang('Expense Details') . '"><i class="ti-pencil-alt"></i> ' . _lang('Edit') . '</a>'
+                    . '<a class="dropdown-item ajax-modal" href="' . route('expenses.show', $expense['id']) . '" data-title="' . _lang('Update Expense') . '"><i class="ti-eye"></i>  ' . _lang('View') . '</a>'
+                    . '<form action="' . route('expenses.destroy', $expense['id']) . '" method="post">'
+                    . csrf_field()
+                    . '<input name="_method" type="hidden" value="DELETE">'
+                    . '<button class="dropdown-item btn-remove" type="submit"><i class="ti-trash"></i> ' . _lang('Delete') . '</button>'
                     . '</form>'
                     . '</div>'
                     . '</div>';
@@ -66,7 +70,8 @@ class ExpenseController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return back();
         } else {
@@ -80,7 +85,8 @@ class ExpenseController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'expense_date'        => 'required',
             'expense_category_id' => 'required',
@@ -122,7 +128,6 @@ class ExpenseController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $expense, 'table' => '#expenses_table']);
         }
-
     }
 
     /**
@@ -131,14 +136,14 @@ class ExpenseController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $expense = Expense::find($id);
         if (!$request->ajax()) {
             return back();
         } else {
             return view('backend.expense.modal.view', compact('expense', 'id'));
         }
-
     }
 
     /**
@@ -147,14 +152,14 @@ class ExpenseController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $expense = Expense::find($id);
         if (!$request->ajax()) {
             return back();
         } else {
             return view('backend.expense.modal.edit', compact('expense', 'id'));
         }
-
     }
 
     /**
@@ -164,7 +169,8 @@ class ExpenseController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'expense_date'        => 'required',
             'expense_category_id' => 'required',
@@ -207,7 +213,6 @@ class ExpenseController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $expense, 'table' => '#expenses_table']);
         }
-
     }
 
     /**
@@ -216,7 +221,8 @@ class ExpenseController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $expense = Expense::find($id);
         $expense->delete();
         return redirect()->route('expenses.index')->with('success', _lang('Deleted Successfully'));

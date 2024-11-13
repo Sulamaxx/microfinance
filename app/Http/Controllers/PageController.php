@@ -7,15 +7,17 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PageController extends Controller {
+class PageController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -23,7 +25,8 @@ class PageController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $pages = Page::all()->sortByDesc("id");
         return view('backend.website_management.page.list', compact('pages'));
     }
@@ -33,7 +36,8 @@ class PageController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return view('backend.website_management.page.create');
         } else {
@@ -47,7 +51,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'trans.title' => 'required',
             'trans.body'  => 'required',
@@ -75,7 +80,6 @@ class PageController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Sucessfully'), 'data' => $page, 'table' => '#pages_table']);
         }
-
     }
 
     /**
@@ -84,14 +88,14 @@ class PageController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $page = Page::find($id);
         if (!$request->ajax()) {
             return view('backend.website_management.page.edit', compact('page', 'id'));
         } else {
             return view('backend.website_management.page.modal.edit', compact('page', 'id'));
         }
-
     }
 
     /**
@@ -101,7 +105,8 @@ class PageController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'trans.title' => 'required',
             'trans.body'  => 'required',
@@ -132,7 +137,6 @@ class PageController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Sucessfully'), 'data' => $page, 'table' => '#pages_table']);
         }
-
     }
 
     /**
@@ -141,7 +145,8 @@ class PageController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $page = Page::find($id);
         $page->delete();
 

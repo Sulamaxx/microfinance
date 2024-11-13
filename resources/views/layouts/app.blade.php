@@ -217,7 +217,9 @@
 
                                 <!--Branch Switcher-->
                                 @if (auth()->user()->user_type == 'admin')
-                                    <div class="dropdown float-right">
+                                    {{-- Temporary comment --}}
+
+                                    {{-- <div class="dropdown float-right">
                                         <a class="dropdown-toggle btn btn-dark btn-xs" type="button"
                                             id="selectLanguage" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">
@@ -233,7 +235,7 @@
                                                     href="{{ route('switch_branch') }}?branch_id={{ $branch->id }}&branch={{ $branch->name }}">{{ $branch->name }}</a>
                                             @endforeach
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 @endif
                                 <!--@include('layouts.others.breadcrumbs')-->
                             </div>
@@ -296,6 +298,9 @@
                 $("#main_alert > span.msg").html(" {{ session('success') }} ");
                 $("#main_alert").addClass("alert-success").removeClass("alert-danger");
                 $("#main_alert").css('display', 'block');
+                setTimeout(() => {
+                    $("#main_alert").css('display', 'none');
+                }, 5000);
             @endif
 
             //Show Single Error Message
@@ -303,6 +308,9 @@
                 $("#main_alert > span.msg").html(" {{ session('error') }} ");
                 $("#main_alert").addClass("alert-danger").removeClass("alert-success");
                 $("#main_alert").css('display', 'block');
+                setTimeout(() => {
+                    $("#main_alert").css('display', 'none');
+                }, 5000);
             @endif
 
 

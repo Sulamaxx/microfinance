@@ -6,15 +6,17 @@ use App\Models\SavingsProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class SavingsProductController extends Controller {
+class SavingsProductController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -22,7 +24,8 @@ class SavingsProductController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $savingsproducts = SavingsProduct::all()->sortByDesc("id");
         return view('backend.savings_product.list', compact('savingsproducts'));
     }
@@ -32,7 +35,8 @@ class SavingsProductController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return back();
         } else {
@@ -46,7 +50,8 @@ class SavingsProductController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'                           => 'required',
             'account_number_prefix'          => 'nullable|max:10',
@@ -110,7 +115,6 @@ class SavingsProductController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $savingsproduct, 'table' => '#savings_products_table']);
         }
-
     }
 
     /**
@@ -119,14 +123,14 @@ class SavingsProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $savingsproduct = SavingsProduct::find($id);
         if (!$request->ajax()) {
             return back();
         } else {
             return view('backend.savings_product.modal.view', compact('savingsproduct', 'id'));
         }
-
     }
 
     /**
@@ -135,7 +139,8 @@ class SavingsProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $savingsproduct = SavingsProduct::find($id);
         if (!$request->ajax()) {
             return back();
@@ -151,7 +156,8 @@ class SavingsProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'                           => 'required',
             'account_number_prefix'          => 'nullable|max:10',
@@ -215,7 +221,6 @@ class SavingsProductController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $savingsproduct, 'table' => '#savings_products_table']);
         }
-
     }
 
     /**
@@ -224,7 +229,8 @@ class SavingsProductController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $savingsproduct = SavingsProduct::find($id);
         $savingsproduct->delete();
         return redirect()->route('savings_products.index')->with('success', _lang('Deleted Successfully'));

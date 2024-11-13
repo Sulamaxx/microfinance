@@ -11,15 +11,17 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class DepositController extends Controller {
+class DepositController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -27,7 +29,8 @@ class DepositController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function manual_methods() {
+    public function manual_methods()
+    {
         $deposit_methods = DepositMethod::where('status', 1)->get();
         return view('backend.customer_portal.deposit.manual_methods', compact('deposit_methods'));
     }
@@ -37,12 +40,14 @@ class DepositController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function automatic_methods() {
+    public function automatic_methods()
+    {
         $deposit_methods = PaymentGateway::where('status', 1)->get();
         return view('backend.customer_portal.deposit.automatic_methods', compact('deposit_methods'));
     }
 
-    public function manual_deposit(Request $request, $methodId) {
+    public function manual_deposit(Request $request, $methodId)
+    {
         if ($request->isMethod('get')) {
             $alert_col = 'col-lg-8 offset-lg-2';
             $accounts  = SavingsAccount::with('savings_type')
@@ -125,7 +130,8 @@ class DepositController extends Controller {
         }
     }
 
-    public function automatic_deposit(Request $request, $methodId) {
+    public function automatic_deposit(Request $request, $methodId)
+    {
         if ($request->isMethod('get')) {
             if ($request->ajax()) {
                 $accounts = SavingsAccount::with('savings_type')
@@ -178,14 +184,14 @@ class DepositController extends Controller {
                 $minimumAmount = $deposit_method->chargeLimits()->min('minimum_amount');
                 $maximumAmount = $deposit_method->chargeLimits()->max('maximum_amount');
 
-                $currencyName = $deposit_method->is_crypto == 1 ? get_base_currency(): $deposit_method->currency;
+                $currencyName = $deposit_method->is_crypto == 1 ? get_base_currency() : $deposit_method->currency;
 
                 if ($gatewayAmount < $minimumAmount) {
                     return redirect()->route('deposit.automatic_methods')
                         ->with('error', _lang('The amount must be at least') . ' ' . $minimumAmount . ' ' . $currencyName)
                         ->withInput();
                 }
-    
+
                 if ($gatewayAmount > $maximumAmount) {
                     return redirect()->route('deposit.automatic_methods')
                         ->with('error', _lang('The amount may not be greater than') . ' ' . $maximumAmount . ' ' . $currencyName)
@@ -232,5 +238,4 @@ class DepositController extends Controller {
             return view($data->view, compact('data', 'deposit', 'gatewayAmount', 'charge', 'alert_col'));
         }
     }
-
 }

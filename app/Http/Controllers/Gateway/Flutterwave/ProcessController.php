@@ -7,19 +7,21 @@ use App\Models\Transaction;
 use App\Notifications\DepositMoney;
 use Illuminate\Http\Request;
 
-class ProcessController extends Controller {
+class ProcessController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         ini_set('error_reporting', E_ALL);
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
 
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -27,7 +29,8 @@ class ProcessController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public static function process($deposit) {
+    public static function process($deposit)
+    {
         $data                 = array();
         $data['callback_url'] = route('callback.' . $deposit->gateway->slug);
         $data['custom']       = $deposit->id;
@@ -41,7 +44,8 @@ class ProcessController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function callback(Request $request) {
+    public function callback(Request $request)
+    {
         @ini_set('max_execution_time', 0);
         @set_time_limit(0);
 
@@ -76,7 +80,7 @@ class ProcessController extends Controller {
         if ($response->status == 'success') {
 
             $amount           = $response->data->amount;
-        
+
             //Update Transaction
             if ($transaction->gateway_amount <= $amount) {
                 $transaction->status = 2; // Completed
@@ -87,12 +91,12 @@ class ProcessController extends Controller {
             //Trigger Deposit Money notifications
             try {
                 $transaction->member->notify(new DepositMoney($transaction));
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
 
             return redirect()->route('dashboard.index')->with('success', _lang('Money Deposited Successfully'));
         } else {
             return redirect()->route('deposit.automatic_methods')->with('error', _lang('Sorry, Payment not completed !'));
         }
     }
-
 }

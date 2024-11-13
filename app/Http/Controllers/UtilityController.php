@@ -13,20 +13,23 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
-class UtilityController extends Controller {
+class UtilityController extends Controller
+{
     /**
      * Show the Settings Page.
      *
      * @return Response
      */
 
-    public function __construct() {
+    public function __construct()
+    {
         header('Cache-Control: no-cache');
         header('Pragma: no-cache');
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
-    public function settings(Request $request, $store = '') {
+    public function settings(Request $request, $store = '')
+    {
         if ($store == '') {
             return view('backend.administration.general_settings.settings');
         } else {
@@ -66,7 +69,8 @@ class UtilityController extends Controller {
         }
     }
 
-    public function upload_logo(Request $request) {
+    public function upload_logo(Request $request)
+    {
         $this->validate($request, [
             'logo' => 'required|image|mimes:jpeg,png,jpg|max:8192',
         ]);
@@ -96,11 +100,11 @@ class UtilityController extends Controller {
             } else {
                 return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Logo Upload successfully')]);
             }
-
         }
     }
 
-    public function upload_file($file_name, Request $request) {
+    public function upload_file($file_name, Request $request)
+    {
 
         if ($request->hasFile($file_name)) {
             $file            = $request->file($file_name);
@@ -123,7 +127,8 @@ class UtilityController extends Controller {
         }
     }
 
-    public function system_settings(Request $request, $view = '') {
+    public function system_settings(Request $request, $view = '')
+    {
         if ($request->isMethod('get')) {
             return view("backend.administration.general_settings.$view");
         } else if ($request->isMethod('post')) {
@@ -160,7 +165,8 @@ class UtilityController extends Controller {
         }
     }
 
-    public function theme_option(Request $request, $store = '') {
+    public function theme_option(Request $request, $store = '')
+    {
         if ($store == '') {
             return view("backend.administration.general_settings.theme_option");
         } else {
@@ -187,7 +193,6 @@ class UtilityController extends Controller {
                     $translation->setting_id = $setting->id;
                     $translation->value      = $setting->value;
                     $translation->save();
-
                 } else {
                     $setting        = new Setting();
                     $setting->name  = $key;
@@ -201,7 +206,6 @@ class UtilityController extends Controller {
 
                 \Cache::put($key, $value);
                 \Cache::put($key . "-" . get_language(), $value);
-
             } //End $_POST Loop
 
             //Upload File
@@ -222,12 +226,14 @@ class UtilityController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function database_backup_list() {
+    public function database_backup_list()
+    {
         $databasebackups = \App\Models\DatabaseBackup::all()->sortByDesc("id");
         return view('backend.administration.database_backup.list', compact('databasebackups'));
     }
 
-    public function create_database_backup() {
+    public function create_database_backup()
+    {
         @ini_set('max_execution_time', 0);
         @set_time_limit(0);
 
@@ -285,7 +291,8 @@ class UtilityController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function download_database_backup($id) {
+    public function download_database_backup($id)
+    {
         $databasebackup = \App\Models\DatabaseBackup::find($id);
         $file           = 'public/backup/DB-BACKUP-' . $databasebackup->file;
         return response()->download($file);
@@ -297,7 +304,8 @@ class UtilityController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy_database_backup($id) {
+    public function destroy_database_backup($id)
+    {
         $databasebackup = \App\Models\DatabaseBackup::find($id);
         $file           = 'public/backup/DB-BACKUP-' . $databasebackup->file;
         $databasebackup->delete();
@@ -306,7 +314,8 @@ class UtilityController extends Controller {
         return redirect()->route('database_backups.list')->with('success', _lang('Deleted successfully'));
     }
 
-    public function remove_cache(Request $request) {
+    public function remove_cache(Request $request)
+    {
         $this->validate($request, [
             'cache' => 'required',
         ]);
@@ -322,7 +331,8 @@ class UtilityController extends Controller {
         return back()->with('success', _lang('Cache Removed successfully'));
     }
 
-    public function send_test_email(Request $request) {
+    public function send_test_email(Request $request)
+    {
         @ini_set('max_execution_time', 0);
         @set_time_limit(0);
 
@@ -348,7 +358,7 @@ class UtilityController extends Controller {
             } else {
                 return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Your Message send sucessfully')]);
             }
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             if (!$request->ajax()) {
                 return back()->with('error', $e->getMessage());
             } else {
@@ -356,5 +366,4 @@ class UtilityController extends Controller {
             }
         }
     }
-
 }

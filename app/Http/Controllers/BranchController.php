@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class BranchController extends Controller {
+class BranchController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -22,7 +25,8 @@ class BranchController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $branchs = Branch::all()->sortByDesc("id");
         return view('backend.branch.list', compact('branchs'));
     }
@@ -32,7 +36,8 @@ class BranchController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         if (!$request->ajax()) {
             return view('backend.branch.create');
         } else {
@@ -46,10 +51,15 @@ class BranchController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
+        // Validate input data, including weekdays
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
             'contact_email' => 'nullable|email',
+            'no'            => 'nullable',
+            'code'          => 'nullable',
+            'weekdays'      => 'nullable|array'
         ]);
 
         if ($validator->fails()) {
@@ -62,13 +72,12 @@ class BranchController extends Controller {
             }
         }
 
-        $branch                = new Branch();
-        $branch->name          = $request->input('name');
-        $branch->contact_email = $request->input('contact_email');
-        $branch->contact_phone = $request->input('contact_phone');
-        $branch->address       = $request->input('address');
-        $branch->descriptions  = $request->input('descriptions');
-
+        // Save branch details including weekdays
+        $branch = new Branch();
+        $branch->name = $request->input('name');
+        $branch->no = $request->input('no');
+        $branch->code = $request->input('code');
+        $branch->weekdays = $request->input('weekdays');
         $branch->save();
 
         if (!$request->ajax()) {
@@ -76,8 +85,8 @@ class BranchController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Successfully'), 'data' => $branch, 'table' => '#branches_table']);
         }
-
     }
+
 
     /**
      * Display the specified resource.
@@ -85,14 +94,15 @@ class BranchController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $branch = Branch::find($id);
+        Log::info($branch);
         if (!$request->ajax()) {
             return view('backend.branch.view', compact('branch', 'id'));
         } else {
             return view('backend.branch.modal.view', compact('branch', 'id'));
         }
-
     }
 
     /**
@@ -101,14 +111,14 @@ class BranchController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $branch = Branch::find($id);
         if (!$request->ajax()) {
             return view('backend.branch.edit', compact('branch', 'id'));
         } else {
             return view('backend.branch.modal.edit', compact('branch', 'id'));
         }
-
     }
 
     /**
@@ -118,10 +128,14 @@ class BranchController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
             'contact_email' => 'nullable|email',
+            'no'            => 'nullable',
+            'code'          => 'nullable',
+            'weekdays'      => 'nullable|array'
         ]);
 
         if ($validator->fails()) {
@@ -135,11 +149,10 @@ class BranchController extends Controller {
         }
 
         $branch                = Branch::find($id);
-        $branch->name          = $request->input('name');
-        $branch->contact_email = $request->input('contact_email');
-        $branch->contact_phone = $request->input('contact_phone');
-        $branch->address       = $request->input('address');
-        $branch->descriptions  = $request->input('descriptions');
+        $branch->name = $request->input('name');
+        $branch->no = $request->input('no');
+        $branch->code = $request->input('code');
+        $branch->weekdays = $request->input('weekdays');
 
         $branch->save();
 
@@ -148,7 +161,6 @@ class BranchController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated Successfully'), 'data' => $branch, 'table' => '#branches_table']);
         }
-
     }
 
     /**
@@ -157,7 +169,8 @@ class BranchController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $branch = Branch::find($id);
         $branch->delete();
         return redirect()->route('branches.index')->with('success', _lang('Deleted Successfully'));

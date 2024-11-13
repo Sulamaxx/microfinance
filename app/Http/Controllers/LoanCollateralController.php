@@ -6,15 +6,17 @@ use App\Models\LoanCollateral;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class LoanCollateralController extends Controller {
+class LoanCollateralController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+    public function __construct()
+    {
+        date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
     }
 
     /**
@@ -22,7 +24,8 @@ class LoanCollateralController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($loan_id) {
+    public function index($loan_id)
+    {
         $loancollaterals = LoanCollateral::where('loan_id', $loan_id)
             ->orderBy("id", "desc")
             ->get();
@@ -34,7 +37,8 @@ class LoanCollateralController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $loan_id = $request->get('loan_id');
         $alert_col = 'col-lg-8 offset-lg-2';
 
@@ -51,7 +55,8 @@ class LoanCollateralController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'loan_id'         => 'required',
             'name'            => 'required',
@@ -95,7 +100,6 @@ class LoanCollateralController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved successfully'), 'data' => $loancollateral, 'table' => '#loan_collaterals_table']);
         }
-
     }
 
     /**
@@ -104,14 +108,14 @@ class LoanCollateralController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
         $loancollateral = LoanCollateral::find($id);
         if (!$request->ajax()) {
             return view('backend.loan_collateral.view', compact('loancollateral', 'id'));
         } else {
             return view('backend.loan_collateral.modal.view', compact('loancollateral', 'id'));
         }
-
     }
 
     /**
@@ -120,7 +124,8 @@ class LoanCollateralController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $alert_col = 'col-lg-8 offset-lg-2';
         $loancollateral = LoanCollateral::find($id);
         if (!$request->ajax()) {
@@ -128,7 +133,6 @@ class LoanCollateralController extends Controller {
         } else {
             return view('backend.loan_collateral.modal.edit', compact('loancollateral', 'id', 'alert_col'));
         }
-
     }
 
     /**
@@ -138,7 +142,8 @@ class LoanCollateralController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             //'loan_id' => 'required',
             'name'            => 'required',
@@ -183,7 +188,6 @@ class LoanCollateralController extends Controller {
         } else {
             return response()->json(['result' => 'success', 'action' => 'update', 'message' => _lang('Updated successfully'), 'data' => $loancollateral, 'table' => '#loan_collaterals_table']);
         }
-
     }
 
     /**
@@ -192,7 +196,8 @@ class LoanCollateralController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $loancollateral = LoanCollateral::find($id);
         $loancollateral->delete();
         return back()->with('success', _lang('Deleted successfully'));

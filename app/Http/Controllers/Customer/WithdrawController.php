@@ -12,15 +12,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class WithdrawController extends Controller {
+class WithdrawController extends Controller
+{
 
 	/**
 	 * Create a new controller instance.
 	 *
 	 * @return void
 	 */
-	public function __construct() {
-		date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
+	public function __construct()
+	{
+		date_default_timezone_set(get_option('timezone', 'Asia/Colombo'));
 	}
 
 	/**
@@ -28,12 +30,14 @@ class WithdrawController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function manual_methods() {
+	public function manual_methods()
+	{
 		$withdraw_methods = WithdrawMethod::where('status', 1)->get();
 		return view('backend.customer_portal.withdraw.manual_methods', compact('withdraw_methods'));
 	}
 
-	public function manual_withdraw(Request $request, $methodId, $otp = '') {
+	public function manual_withdraw(Request $request, $methodId, $otp = '')
+	{
 		if ($request->isMethod('get')) {
 			$alert_col = 'col-lg-8 offset-lg-2';
 			$withdraw_method = WithdrawMethod::find($methodId);
@@ -187,8 +191,6 @@ class WithdrawController extends Controller {
 			} else {
 				return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Withdraw Request submitted successfully'), 'data' => $withdrawRequest, 'table' => '#unknown_table']);
 			}
-
 		}
 	}
-
 }
