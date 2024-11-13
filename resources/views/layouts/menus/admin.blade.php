@@ -69,6 +69,21 @@
     </ul>
 </li>
 
+<li>
+    <a href="{{ route('users.index') }}"><i class="ti-user"></i><span>{{ _lang('User Management') }}</span></a>
+</li>
+
+{{-- <li>
+    <a href="javascript: void(0);"><i class="ti-user"></i><span>{{ _lang('User Management') }}</span><span
+            class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+    <ul class="nav-second-level" aria-expanded="false">
+        <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">{{ _lang('All Users') }}</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('roles.index') }}">{{ _lang('User Roles') }}</a></li>
+        <li class="nav-item"><a class="nav-link"
+                href="{{ route('permission.index') }}">{{ _lang('Access Control') }}</a></li>
+    </ul>
+</li> --}}
+
 {{-- <li><a href="{{ route('loan_payments.index') }}"><i class="fas fa-receipt"></i><span>{{ _lang('Repayments') }}</span></a></li> --}}
 
 {{-- <li>
@@ -131,14 +146,7 @@
 	<a href="{{ route('withdraw_methods.index') }}"><i class="fas fa-clipboard-list"></i><span>{{ _lang('Withdraw Methods') }}</span></a>
 </li>
 
-<li>
-	<a href="javascript: void(0);"><i class="ti-user"></i><span>{{ _lang('User Management') }}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-	<ul class="nav-second-level" aria-expanded="false">
-		<li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">{{ _lang('All Users') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('roles.index') }}">{{ _lang('User Roles') }}</a></li>
-		<li class="nav-item"><a class="nav-link" href="{{ route('permission.index') }}">{{ _lang('Access Control') }}</a></li>
-	</ul>
-</li>
+
 
 <li>
 	<a href="javascript: void(0);"><i class="ti-world"></i><span>{{ _lang('Languages') }}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>

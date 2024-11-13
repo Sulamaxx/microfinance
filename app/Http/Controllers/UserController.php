@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
+use App\Models\Role;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
@@ -42,8 +44,11 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
+        $branches = Branch::orderBy('name', 'asc')->get();
+        $roles = Role::orderBy('name', 'asc')->get();
+
         if (!$request->ajax()) {
-            return view('backend.user.create');
+            return view('backend.user.create', compact('branches', 'roles'));
         } else {
             return back();
         }
@@ -103,7 +108,7 @@ class UserController extends Controller
         $user->profile_picture = '<img src="' . profile_picture($user->profile_picture) . '" class="thumb-sm mr-2">';
 
         if (!$request->ajax()) {
-            return redirect()->route('users.create')->with('success', _lang('Saved Sucessfully'));
+            return redirect()->route('users.index')->with('success', _lang('Saved Sucessfully'));
         } else {
             return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Saved Sucessfully'), 'data' => $user, 'table' => '#users_table']);
         }

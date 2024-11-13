@@ -83,11 +83,11 @@ Route::group(['middleware' => ['install']], function () {
 
             // Route::group(['middleware' => ['admin', 'demo'], 'prefix' => 'admin'], function () {
 
-            //     //User Management
-            //     Route::resource('users', UserController::class);
+            //User Management
+            Route::resource('users', UserController::class);
 
-            //     //User Roles
-            //     Route::resource('roles', RoleController::class);
+            //User Roles
+            Route::resource('roles', RoleController::class);
 
             //     //Payment Gateways
             //     Route::resource('payment_gateways', PaymentGatewayController::class)->except([
