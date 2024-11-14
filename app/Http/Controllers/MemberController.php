@@ -280,7 +280,6 @@ class MemberController extends Controller
         $member = Member::withoutGlobalScopes(['status'])
             ->with('sponsor')
             ->find($id);
-        Log::info($member);
         if (!$member) {
             abort(404, 'Member not found or inactive');
         }

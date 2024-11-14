@@ -52,26 +52,33 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-form-label">{{ _lang('User Role') }}</label>
                                     <div class="col-xl-9">
-                                        <select class="form-control select2-ajax" data-href="{{ route('roles.create') }}"
-                                            data-title="{{ _lang('Add New Role') }}" data-value="id" data-display="name"
-                                            data-table="roles" name="role_id" id="role_id">
-                                            <option value="">{{ _lang('Select One') }}</option>
+                                        <select class="form-control" name="role_id" id="role_id" disabled>
+                                            <option value="0">{{ _lang('Select One') }}</option>
                                             {{ create_option('roles', 'id', 'name', $user->role_id) }}
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-form-label">{{ _lang('Branch') }}</label>
+                                    <label class="col-xl-3 col-form-label">{{ _lang('Center') }}</label>
                                     <div class="col-xl-9">
-                                        <select class="form-control select2 auto-select"
-                                            data-selected="{{ $user->branch_id }}" name="branch_id" id="user_branch_id">
-                                            <option value="">{{ get_option('default_branch_name', 'Main Branch') }}
-                                            </option>
-                                            {{ create_option('branches', 'id', 'name') }}
-                                        </select>
-                                        {{-- <small class="text-primary"><i class="ti-info-alt"></i>
-                                            <i>{{ _lang('If not assign any branch then user will get default branch access.') }}</i></small> --}}
+                                        @if (auth()->user()->user_type == 'admin')
+                                            <select class="form-control select2" data-selected="{{ $user->branch_id }}"
+                                                name="branch_id">
+                                                <option value="">
+                                                    {{ get_option('default_branch_name', 'Main Branch') }}
+                                                </option>
+                                                {{ create_option('branches', 'id', 'name', auth()->user()->branch_id) }}
+                                            </select>
+                                        @else
+                                            <select class="form-control" data-selected="{{ $user->branch_id }}"
+                                                name="branch_id" disabled>
+                                                <option value="">
+                                                    {{ get_option('default_branch_name', 'Main Branch') }}
+                                                </option>
+                                                {{ create_option('branches', 'id', 'name', auth()->user()->branch_id) }}
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
 

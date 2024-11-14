@@ -139,8 +139,10 @@ class UserController extends Controller
     public function edit(Request $request, $id)
     {
         $user = User::find($id);
+        $branches = Branch::orderBy('name', 'asc')->get();
+        $roles = Role::orderBy('name', 'asc')->get();
         if (!$request->ajax()) {
-            return view('backend.user.edit', compact('user', 'id'));
+            return view('backend.user.edit', compact('user', 'id', 'branches', 'roles'));
         } else {
             return back();
         }
